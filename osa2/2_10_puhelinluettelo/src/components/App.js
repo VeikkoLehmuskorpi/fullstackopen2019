@@ -10,8 +10,7 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345' },
     { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]);
-  // const [persons, setPersons] = useState([]);
-  const [filteredPersons, setFilteredPersons] = useState(0);
+  const [filteredPersons, setFilteredPersons] = useState([]);
   const [filter, setFilter] = useState('');
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
@@ -23,16 +22,16 @@ const App = () => {
 
   const filterPhonebook = filter => {
     if (filter !== '') {
-      const lowercasePeopleArr = persons.map(person =>
-        String(person.name).toLowerCase()
-      );
-      console.log(lowercasePeopleArr);
-      const filteredPeopleArr = lowercasePeopleArr.filter(person =>
-        person.includes(filter.toLowerCase())
+      const filteredPeopleArr = persons.filter(
+        person =>
+          person.name.includes(filter) ||
+          person.name
+            .toLocaleLowerCase()
+            .includes(filter.toLocaleLowerCase().trim())
       );
       setFilteredPersons(filteredPeopleArr);
     } else {
-      setFilteredPersons([]);
+      setFilteredPersons(persons);
     }
   };
 
@@ -40,9 +39,14 @@ const App = () => {
     e.preventDefault();
     const personObj = { name: newName, number: newPhone };
 
-    const personsNamesArr = persons.map(person => person.name);
-    if (personsNamesArr.indexOf(newName) === 1) {
-      alert(`${newName} is already added to the phonebook`);
+    const personsNamesArr = persons.map(person =>
+      person.name.toLocaleLowerCase()
+    );
+    if (
+      personsNamesArr.includes(newName) ||
+      personsNamesArr.includes(newName.toLocaleLowerCase().trim())
+    ) {
+      alert(`${newName} is already added to phonebook`);
       return;
     }
 
