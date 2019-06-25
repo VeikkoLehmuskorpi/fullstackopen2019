@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import PersonNumbers from './PersonNumbers';
+import axios from 'axios';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]);
-  // const [persons, setPersons] = useState([]);
+  // const [persons, setPersons] = useState([
+  //   { name: 'Arto Hellas', number: '040-123456' },
+  //   { name: 'Ada Lovelace', number: '39-44-5323523' },
+  //   { name: 'Dan Abramov', number: '12-43-234345' },
+  //   { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  // ]);
+  const [persons, setPersons] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data);
+      })
+      .catch(error => console.warn(error));
+  }, []);
+
   const [filteredPersons, setFilteredPersons] = useState(0);
   const [filter, setFilter] = useState('');
   const [newName, setNewName] = useState('');
@@ -38,7 +49,10 @@ const App = () => {
 
   const addPerson = e => {
     e.preventDefault();
-    const personObj = { name: newName, number: newPhone };
+    const personObj = {
+      name: newName,
+      number: newPhone
+    };
 
     const personsNamesArr = persons.map(person => person.name);
     if (personsNamesArr.indexOf(newName) === 1) {
