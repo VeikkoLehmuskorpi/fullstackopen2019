@@ -3,6 +3,7 @@ import Filter from './Filter';
 import PersonForm from './PersonForm';
 import PersonNumbers from './PersonNumbers';
 import contactService from '../services/contactService';
+import Notification from './Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -18,6 +19,18 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationMessageType, setNotificationMessageType] = useState(null);
+
+  const displayNotification = (msg, msgType) => {
+    setNotificationMessage(msg);
+    setNotificationMessageType(msgType);
+
+    setTimeout(() => {
+      setNotificationMessage(null);
+      setNotificationMessageType(null);
+    }, 5000);
+  };
 
   const handleSetFilter = e => {
     setFilter(e.target.value);
@@ -74,6 +87,7 @@ const App = () => {
       .then(returnedPerson => {
         setPersons([...persons, returnedPerson]);
         resetForm();
+        displayNotification(`Added ${personObj.name}`);
       })
       .catch(error => alert(error));
   };
@@ -88,10 +102,20 @@ const App = () => {
             person.id !== personId ? person : returnedPerson
           )
         );
+        displayNotification(`Updated ${newPersonObj.name}`);
       })
-      .catch(error => alert(error));
+      .catch(error => {
+        displayNotification(
+          `Information of ${
+            newPersonObj.name
+          } has already been removed from server`,
+          'error'
+        );
+      });
   };
 
+  // Kun välistä poistetaan henkilö, JSON Server ei korjaa henkilöiden ID:tä,
+  // tämä rikkoo sovelluksen
   const deletePerson = passedPerson => {
     if (window.confirm(`Delete ${passedPerson.name}?`)) {
       contactService
@@ -101,6 +125,7 @@ const App = () => {
             ...persons.filter(person => person.id !== passedPerson.id)
           ])
         )
+        .then(displayNotification(`Deleted ${passedPerson.name}`, 'error'))
         .catch(error => alert(error));
     }
   };
@@ -125,6 +150,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification
+        messageType={notificationMessageType}
+        message={notificationMessage}
+      />
+
       <Filter filter={filter} handleSetFilter={handleSetFilter} />
       <h2>add a new</h2>
       <PersonForm

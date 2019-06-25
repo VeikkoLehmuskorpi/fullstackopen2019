@@ -1,14 +1,3 @@
 {
-  "persons": [
-    {
-      "name": "Arto Aatami",
-      "number": "23423424234234",
-      "id": 1
-    },
-    {
-      "name": "c",
-      "number": "23423",
-      "id": 3
-    }
-  ]
+  "persons": []
 }
