@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import PersonNumbers from './PersonNumbers';
-import axios from 'axios';
+import contactService from '../services/contactService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data);
-      })
-      .catch(error => console.warn(error));
+    contactService
+      .getAllContacts()
+      .then(initialContacts => setPersons(initialContacts))
+      .catch(error => alert(error));
   }, []);
 
   const [filteredPersons, setFilteredPersons] = useState(0);
@@ -55,12 +53,56 @@ const App = () => {
       personsNamesArr.includes(newName) ||
       personsNamesArr.includes(newName.toLocaleLowerCase().trim())
     ) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        updatePerson(
+          personsNamesArr.indexOf(newName.toLocaleLowerCase().trim()),
+          personObj
+        );
+        return;
+      } else {
+        resetForm();
+        return;
+      }
     }
 
-    setPersons([...persons, personObj]);
-    resetForm();
+    contactService
+      .addContact(personObj)
+      .then(returnedPerson => {
+        setPersons([...persons, returnedPerson]);
+        resetForm();
+      })
+      .catch(error => alert(error));
+  };
+
+  const updatePerson = (personId, newPersonObj) => {
+    personId = personId + 1;
+    contactService
+      .updateContact(personId, newPersonObj)
+      .then(returnedPerson => {
+        setPersons(
+          persons.map(person =>
+            person.id !== personId ? person : returnedPerson
+          )
+        );
+      })
+      .catch(error => alert(error));
+  };
+
+  const deletePerson = passedPerson => {
+    if (window.confirm(`Delete ${passedPerson.name}?`)) {
+      contactService
+        .deleteContact(passedPerson.id)
+        .then(
+          setPersons([
+            ...persons.filter(person => person.id !== passedPerson.id)
+          ])
+        )
+        .catch(error => alert(error));
+    }
   };
 
   const resetForm = () => {
@@ -75,7 +117,8 @@ const App = () => {
   const personRows = personsArr =>
     personsArr.map(person => (
       <li key={person.name}>
-        {person.name} {person.number}
+        {person.name} {person.number}{' '}
+        <button onClick={() => deletePerson(person)}>delete</button>
       </li>
     ));
 
