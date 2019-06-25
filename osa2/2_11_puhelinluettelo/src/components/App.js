@@ -5,6 +5,7 @@ import PersonNumbers from './PersonNumbers';
 import axios from 'axios';
 
 const App = () => {
+<<<<<<< HEAD:osa2/2_11_puhelinluettelo/src/components/App.js
   // const [persons, setPersons] = useState([
   //   { name: 'Arto Hellas', number: '040-123456' },
   //   { name: 'Ada Lovelace', number: '39-44-5323523' },
@@ -23,6 +24,15 @@ const App = () => {
   }, []);
 
   const [filteredPersons, setFilteredPersons] = useState(0);
+=======
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ]);
+  const [filteredPersons, setFilteredPersons] = useState([]);
+>>>>>>> 1b022fe0ce43a4b208325b650a541c718b1dd565:osa2/2_10_puhelinluettelo/src/components/App.js
   const [filter, setFilter] = useState('');
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
@@ -34,16 +44,16 @@ const App = () => {
 
   const filterPhonebook = filter => {
     if (filter !== '') {
-      const lowercasePeopleArr = persons.map(person =>
-        String(person.name).toLowerCase()
-      );
-      console.log(lowercasePeopleArr);
-      const filteredPeopleArr = lowercasePeopleArr.filter(person =>
-        person.includes(filter.toLowerCase())
+      const filteredPeopleArr = persons.filter(
+        person =>
+          person.name.includes(filter) ||
+          person.name
+            .toLocaleLowerCase()
+            .includes(filter.toLocaleLowerCase().trim())
       );
       setFilteredPersons(filteredPeopleArr);
     } else {
-      setFilteredPersons([]);
+      setFilteredPersons(persons);
     }
   };
 
@@ -54,9 +64,14 @@ const App = () => {
       number: newPhone
     };
 
-    const personsNamesArr = persons.map(person => person.name);
-    if (personsNamesArr.indexOf(newName) === 1) {
-      alert(`${newName} is already added to the phonebook`);
+    const personsNamesArr = persons.map(person =>
+      person.name.toLocaleLowerCase()
+    );
+    if (
+      personsNamesArr.includes(newName) ||
+      personsNamesArr.includes(newName.toLocaleLowerCase().trim())
+    ) {
+      alert(`${newName} is already added to phonebook`);
       return;
     }
 
