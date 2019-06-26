@@ -59,37 +59,32 @@ const App = () => {
       number: newPhone
     };
 
-    const personsNamesArr = persons.map(person =>
-      person.name.toLocaleLowerCase()
+    let regex = RegExp(newName, 'i');
+    let duplicateId;
+    persons.map((person, index) =>
+      regex.test(person.name) ? (duplicateId = index) : null
     );
-    if (
-      personsNamesArr.includes(newName) ||
-      personsNamesArr.includes(newName.toLocaleLowerCase().trim())
-    ) {
+
+    if (duplicateId === undefined) {
+      contactService
+        .addContact(personObj)
+        .then(returnedPerson => {
+          setPersons([...persons, returnedPerson]);
+          resetForm();
+          displayNotification(`Added ${personObj.name}`);
+        })
+        .catch(error => alert(error));
+    } else {
       if (
         window.confirm(
           `${newName} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
-        updatePerson(
-          personsNamesArr.indexOf(newName.toLocaleLowerCase().trim()),
-          personObj
-        );
-        return;
+        updatePerson(duplicateId, personObj);
       } else {
-        resetForm();
         return;
       }
     }
-
-    contactService
-      .addContact(personObj)
-      .then(returnedPerson => {
-        setPersons([...persons, returnedPerson]);
-        resetForm();
-        displayNotification(`Added ${personObj.name}`);
-      })
-      .catch(error => alert(error));
   };
 
   const updatePerson = (personId, newPersonObj) => {
