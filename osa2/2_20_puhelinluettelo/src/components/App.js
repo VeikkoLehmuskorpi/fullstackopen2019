@@ -73,7 +73,10 @@ const App = () => {
           resetForm();
           displayNotification(`Added ${personObj.name}`);
         })
-        .catch(error => alert(error));
+        .catch(error => {
+          console.log(error.response.data);
+          displayNotification(error.response.data.error, 'error');
+        });
     } else {
       if (
         window.confirm(
@@ -81,7 +84,6 @@ const App = () => {
         )
       ) {
         updatePerson(persons[duplicateId].id, personObj);
-        console.log('id:', persons[duplicateId].id);
       } else {
         return;
       }
