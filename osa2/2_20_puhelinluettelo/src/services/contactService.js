@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseEndpoint = '/api/persons';
+const baseEndpoint = 'http://localhost:3001/api/persons';
 
 const getAllContacts = async () => {
   const request = axios.get(baseEndpoint);

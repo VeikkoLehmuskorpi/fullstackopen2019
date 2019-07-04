@@ -80,7 +80,8 @@ const App = () => {
           `${newName} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
-        updatePerson(duplicateId, personObj);
+        updatePerson(persons[duplicateId].id, personObj);
+        console.log('id:', persons[duplicateId].id);
       } else {
         return;
       }
@@ -113,6 +114,7 @@ const App = () => {
   // tämä rikkoo sovelluksen
   const deletePerson = passedPerson => {
     if (window.confirm(`Delete ${passedPerson.name}?`)) {
+      console.log('id:', passedPerson.id);
       contactService
         .deleteContact(passedPerson.id)
         .then(
