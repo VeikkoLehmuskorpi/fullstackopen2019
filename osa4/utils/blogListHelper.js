@@ -59,9 +59,35 @@ const mostBlogs = blogs => {
   return mostBlogsAuthor;
 };
 
+// mostLikes
+const mostLikes = blogs => {
+  const uniqueAuthors = [...new Set(blogs.map(blog => blog.author))];
+
+  const blogsByAuthor = uniqueAuthors.map(author =>
+    blogs.filter(blog => blog.author === author),
+  );
+
+  const authorAndLikes = blogsByAuthor.map(blog =>
+    Object.assign(
+      {},
+      {
+        author: blog[0].author,
+        likes: blog.map(obj => obj.likes).reduce((a, b) => a + b),
+      },
+    ),
+  );
+
+  const mostLikesAuthor = authorAndLikes.filter(
+    author => author.likes >= Math.max(...authorAndLikes.map(obj => obj.likes)),
+  )[0];
+
+  return mostLikesAuthor;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
