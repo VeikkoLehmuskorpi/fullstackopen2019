@@ -1,6 +1,8 @@
 require('dotenv').config();
+// eslint-disable-next-line no-unused-vars
 const http = require('http');
 const express = require('express');
+
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -10,7 +12,7 @@ const blogSchema = mongoose.Schema({
   title: String,
   author: String,
   url: String,
-  likes: Number
+  likes: Number,
 });
 
 const Blog = mongoose.model('Blog', blogSchema);
