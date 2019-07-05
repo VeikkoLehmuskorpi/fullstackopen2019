@@ -1,7 +1,10 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
+
+// dummy
 const dummy = () => 1;
 
+// totalLikes
 const totalLikes = blogs => {
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -15,6 +18,7 @@ const totalLikes = blogs => {
   return blogLikes.reduce(reducer, 0);
 };
 
+// favoriteBlog
 const favoriteBlog = blogs => {
   const reducer = (max, currentValue) => Math.max(max, currentValue);
 
@@ -24,6 +28,7 @@ const favoriteBlog = blogs => {
   return blogs.find(blog => blog.likes === mostLikes);
 };
 
+// mostBlogs
 const mostBlogs = blogs => {
   const countItems = (array, searchItem, searchTerm) => {
     let count = 0;
@@ -46,7 +51,12 @@ const mostBlogs = blogs => {
     ),
   );
 
-  return uniqueBlogAuthors;
+  const mostBlogsAuthor = uniqueBlogAuthors.filter(
+    author =>
+      author.blogs >= Math.max(...uniqueBlogAuthors.map(obj => obj.blogs)),
+  )[0];
+
+  return mostBlogsAuthor;
 };
 
 module.exports = {
