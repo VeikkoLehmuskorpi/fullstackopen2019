@@ -12,7 +12,10 @@ blogsRouter.post('/', (request, response) => {
   const blog = new Blog(request.body);
 
   if (!request.body.title && !request.body.url) {
-    response.status(400).send({ error: 'Title and url missing' });
+    response
+      .status(400)
+      .send({ error: 'Title and url missing' })
+      .close();
   }
 
   blog
