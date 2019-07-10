@@ -19,6 +19,13 @@ describe('when there are initially some blogs saved', () => {
 
     expect(response.body.length).toBe(2);
   });
+
+  test('identifying property is named id', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body[0].id).toBeDefined();
+    expect(response.body[1].id).toBeDefined();
+  });
 });
 
 afterAll(() => mongoose.connection.close());
