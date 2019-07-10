@@ -57,6 +57,17 @@ describe('when saving new blogs', () => {
 
     expect(response.body.likes).toBe(0);
   });
+
+  test('if title and url not set, return statuscode 400', async () => {
+    const invalidBlogObj = {
+      author: 'John Doe',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(invalidBlogObj)
+      .expect(400);
+  });
 });
 
 afterAll(() => mongoose.connection.close());
