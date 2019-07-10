@@ -45,6 +45,18 @@ describe('when saving new blogs', () => {
 
     expect(endResult.body.length).toBe(initialCount + 1);
   });
+
+  test('if likes not set, set it to zero', async () => {
+    const blogObj = {
+      title: 'What happens when posting incorrect data',
+      author: 'NotVeikko Lehmuskorpi',
+      url: 'www.github.com/veikkolehmuskorpi',
+    };
+
+    const response = await api.post('/api/blogs').send(blogObj);
+
+    expect(response.body.likes).toBe(0);
+  });
 });
 
 afterAll(() => mongoose.connection.close());
