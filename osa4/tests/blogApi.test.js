@@ -1,10 +1,35 @@
 const supertest = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
+const Blog = require('../models/blog');
 
 const api = supertest(app);
 
 jest.setTimeout(20000);
+
+const initialBlogs = [
+  {
+    title: 'Initial notes are cool',
+    author: 'Veikko Lehmuskorpi',
+    url: 'www.github.com/veikkolehmuskorpi',
+    likes: 20,
+  },
+  {
+    title: 'So many blogs',
+    author: 'Sam Smith',
+    url: 'www.github.com/samsmith',
+    likes: 33,
+  },
+];
+
+beforeEach(async () => {
+  await Blog.deleteMany({});
+
+  const blogObjects = initialBlogs.map(blog => new Blog(blog));
+
+  const promiseArray = blogObjects.map(blog => blog.save());
+  await Promise.all(promiseArray);
+});
 
 describe('when there are initially some blogs saved', () => {
   test('blogs are returned as json', async () => {
@@ -17,7 +42,7 @@ describe('when there are initially some blogs saved', () => {
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs');
 
-    expect(response.body.length).toBe(2);
+    expect(response.body.length).toBe(initialBlogs.length);
   });
 
   test('identifying property is named id', async () => {
@@ -30,9 +55,6 @@ describe('when there are initially some blogs saved', () => {
 
 describe('when saving new blogs', () => {
   test('blog count increases', async () => {
-    const initialResponse = await api.get('/api/blogs');
-    const initialCount = initialResponse.body.length;
-
     const blogObj = {
       title: 'What happens when posting incorrect data',
       author: 'NotVeikko Lehmuskorpi',
@@ -41,9 +63,9 @@ describe('when saving new blogs', () => {
 
     await api.post('/api/blogs').send(blogObj);
 
-    const endResult = await api.get('/api/blogs');
+    const response = await api.get('/api/blogs');
 
-    expect(endResult.body.length).toBe(initialCount + 1);
+    expect(response.body.length).toBe(initialBlogs.length + 1);
   });
 
   test('if likes not set, set it to zero', async () => {
