@@ -3,7 +3,8 @@ const Blog = require('../models/blog');
 
 blogsRouter.get('/', (request, response) => {
   Blog.find({})
-    .then(blogs => response.json(blogs))
+    .then(blogs => blogs.map(blog => blog.toJSON()))
+    .then(formattedBlogs => response.json(formattedBlogs))
     .catch(error => console.error(error));
 });
 
