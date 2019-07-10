@@ -28,4 +28,23 @@ describe('when there are initially some blogs saved', () => {
   });
 });
 
+describe('when saving new blogs', () => {
+  test('blog count increases', async () => {
+    const initialResponse = await api.get('/api/blogs');
+    const initialCount = initialResponse.body.length;
+
+    const blogObj = {
+      title: 'What happens when posting incorrect data',
+      author: 'NotVeikko Lehmuskorpi',
+      url: 'www.github.com/veikkolehmuskorpi',
+    };
+
+    await api.post('/api/blogs').send(blogObj);
+
+    const endResult = await api.get('/api/blogs');
+
+    expect(endResult.body.length).toBe(initialCount + 1);
+  });
+});
+
 afterAll(() => mongoose.connection.close());
