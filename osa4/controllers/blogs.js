@@ -13,7 +13,7 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 // POST
-blogsRouter.post('/', (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body);
 
   if (!request.body.title && !request.body.url) {
@@ -23,10 +23,12 @@ blogsRouter.post('/', (request, response) => {
       .close();
   }
 
-  blog
-    .save()
-    .then(result => response.status(201).json(result))
-    .catch(error => console.error(error));
+  try {
+    const result = await blog.save();
+    response.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 // DELETE
