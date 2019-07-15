@@ -15,6 +15,11 @@ usersRouter.post('/', async (request, response, next) => {
   try {
     const { body } = request;
 
+    // abort if no password
+    if (body.password === undefined) {
+      return response.status(400).json({ error: 'password required' });
+    }
+
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
