@@ -52,7 +52,7 @@ blogsRouter.post('/', async (request, response, next) => {
     blog.populate('user', { username: 1, name: 1 });
 
     if (!body.title && !body.url) {
-      response
+      return response
         .status(400)
         .send({ error: 'Title and url missing' })
         .close();
@@ -62,9 +62,9 @@ blogsRouter.post('/', async (request, response, next) => {
     // eslint-disable-next-line no-underscore-dangle
     user.blogs = user.blogs.concat(savedBlog._id);
     await user.save();
-    response.status(201).json(savedBlog);
+    return response.status(201).json(savedBlog);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
