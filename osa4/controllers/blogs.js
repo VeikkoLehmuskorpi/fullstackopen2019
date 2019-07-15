@@ -1,6 +1,16 @@
 const blogsRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
+
+// Token extractor
+const getTokenFrom = request => {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7);
+  }
+  return null;
+};
 
 // GET
 blogsRouter.get('/', async (request, response) => {
@@ -14,33 +24,47 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 // POST
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', async (request, response, next) => {
   const { body } = request;
 
-  const blog = new Blog(request.body);
-
-  const user = await User.findById(body.userId);
-
-  // eslint-disable-next-line no-underscore-dangle
-  blog.user = user._id;
-
-  blog.populate('user', { username: 1, name: 1 });
-
-  if (!request.body.title && !request.body.url) {
-    response
-      .status(400)
-      .send({ error: 'Title and url missing' })
-      .close();
-  }
+  // Get token from the request
+  const token = getTokenFrom(request);
 
   try {
+    // Verify token
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    // Invalid token
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: ' token missing or invalid' });
+    }
+
+    // Create a new blog from the request
+    const blog = new Blog(body);
+
+    // Find the correct user by the token id
+    const user = await User.findById(decodedToken.id);
+
+    // Append the correct user to the blog object
+    // eslint-disable-next-line no-underscore-dangle
+    blog.user = user._id;
+
+    // Populate user object
+    blog.populate('user', { username: 1, name: 1 });
+
+    if (!body.title && !body.url) {
+      response
+        .status(400)
+        .send({ error: 'Title and url missing' })
+        .close();
+    }
+
     const savedBlog = await blog.save();
     // eslint-disable-next-line no-underscore-dangle
     user.blogs = user.blogs.concat(savedBlog._id);
     await user.save();
     response.status(201).json(savedBlog);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
