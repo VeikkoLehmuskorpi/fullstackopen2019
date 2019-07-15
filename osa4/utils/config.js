@@ -2,7 +2,7 @@ require('dotenv').config();
 
 let { DB_URI } = process.env;
 const { PORT } = process.env;
-const { TEST_URI } = process.env;
+const { TEST_DB_URI } = process.env;
 const { SECRET } = process.env;
 
 if (process.env.NODE_ENV === 'test') {
@@ -12,6 +12,6 @@ if (process.env.NODE_ENV === 'test') {
 module.exports = {
   DB_URI,
   PORT,
-  TEST_URI,
+  TEST_DB_URI,
   SECRET,
 };
