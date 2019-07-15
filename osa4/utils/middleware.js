@@ -13,8 +13,6 @@ const unknownEndpoint = (request, response) => response.status(404).json({ error
 
 // Middleware: errorHandler
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).json({ error: 'malformatted id' });
   }
@@ -24,6 +22,8 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({ error: 'invalid or missing token' });
   }
+
+  console.error(error.message);
 
   return next(error);
 };
