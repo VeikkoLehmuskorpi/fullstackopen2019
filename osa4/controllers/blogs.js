@@ -3,15 +3,6 @@ const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
-// Token extractor
-const getTokenFrom = request => {
-  const authorization = request.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-  return null;
-};
-
 // GET
 blogsRouter.get('/', async (request, response) => {
   try {
@@ -25,18 +16,11 @@ blogsRouter.get('/', async (request, response) => {
 
 // POST
 blogsRouter.post('/', async (request, response, next) => {
-  const { body } = request;
-
-  // Get token from the request
-  const token = getTokenFrom(request);
+  const { body, token } = request;
 
   try {
     // Verify token
     const decodedToken = jwt.verify(token, process.env.SECRET);
-    // Invalid token
-    if (!token || !decodedToken.id) {
-      return response.status(401).json({ error: ' token missing or invalid' });
-    }
 
     // Create a new blog from the request
     const blog = new Blog(body);
