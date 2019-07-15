@@ -1,3 +1,6 @@
+// Middleware: unknownEndpoint
+const unknownEndpoint = (request, response) => response.status(404).json({ error: 'unknown endpoint' });
+
 // Middleware: errorHandler
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
@@ -16,5 +19,6 @@ const errorHandler = (error, request, response, next) => {
 };
 
 module.exports = {
+  unknownEndpoint,
   errorHandler,
 };
