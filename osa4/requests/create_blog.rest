@@ -2,8 +2,9 @@ POST http://localhost:3001/api/blogs
 content-type: application/json
 
 {
-  "title": "This is the first blog",
-  "author": "Veikko Lehmuskorpi",
-  "url": "www.github.com/veikkolehmuskorpi",
-  "likes": 10
+  "title": "Travel weekend",
+  "author": "Sam Doe",
+  "url": "www.github.com/samdoe",
+  "likes": 33,
+  "userId": "5d2c4fa5df0b4b2280c49490"
 }
