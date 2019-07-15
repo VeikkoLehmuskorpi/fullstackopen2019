@@ -1,10 +1,11 @@
 POST http://localhost:3001/api/blogs
-content-type: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZsZWhtdXNrb3JwaSIsImlkIjoiNWQyYzhiNGNjNjI4NTQyODRjNWYxZDJhIiwiaWF0IjoxNTYzMjAwOTE4fQ.BwtN0Mqs0DZ9E79IA5ACPSjOfuIFHi3enW7lvvLDx9c
 
 {
-  "title": "Travel weekend",
+  "title": "Eating food",
   "author": "Sam Doe",
   "url": "www.github.com/samdoe",
-  "likes": 33,
+  "likes": 12,
   "userId": "5d2c4fa5df0b4b2280c49490"
 }
