@@ -7,6 +7,16 @@ const getAll = async () => {
   return response.data;
 };
 
+const createNew = async (blog, token) => {
+  const response = await axios.post(baseUrl, blog, {
+    headers: {
+      Authorization: `bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 export default {
   getAll,
+  createNew,
 };
