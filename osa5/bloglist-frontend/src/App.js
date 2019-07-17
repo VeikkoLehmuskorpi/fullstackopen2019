@@ -4,6 +4,20 @@ import loginService from './services/login';
 
 const App = () => {
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    console.log('effect ran');
+
+    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
+    if (userJSON !== null) {
+      setUser(JSON.parse(userJSON));
+    }
+
+    return () => {
+      console.log('cleaning effect');
+    };
+  }, []);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [blogs, setBlogs] = useState([]);
@@ -26,9 +40,15 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password });
       setUser(user);
+      window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleLogout = async () => {
+    setUser(null);
+    window.localStorage.removeItem('loggedInBloglistUser');
   };
 
   const loginForm = () => (
@@ -74,7 +94,9 @@ const App = () => {
     <>
       <h1>Blogs</h1>
 
-      <p>{user.name} logged in</p>
+      <p>
+        {user.name} logged in <button onClick={handleLogout}>Logout</button>
+      </p>
 
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
