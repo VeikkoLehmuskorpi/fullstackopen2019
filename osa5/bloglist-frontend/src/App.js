@@ -13,10 +13,30 @@ const App = () => {
       setUser(JSON.parse(userJSON));
     }
 
+    return () => console.log('cleaning effect');
+  }, []);
+
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    console.log('effect ran');
+
+    if (notification === null) {
+      return;
+    }
+
+    setNotification(notification);
+
+    const interval = setTimeout(() => {
+      console.log('5 seconds passed, removing message');
+      setNotification(null);
+    }, 5000);
+
     return () => {
       console.log('cleaning effect');
+      clearTimeout(interval);
     };
-  }, []);
+  }, [notification]);
 
   const [blogs, setBlogs] = useState([]);
   const [title, setTitle] = useState('');
@@ -31,7 +51,12 @@ const App = () => {
       setBlogs(blogs);
     };
 
-    fetchBlogs();
+    try {
+      fetchBlogs();
+    } catch (error) {
+      setNotification(error.message);
+      console.error(error);
+    }
 
     return () => console.log('cleaning effect');
   }, [user]);
@@ -46,11 +71,12 @@ const App = () => {
       setUser(user);
       window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
     } catch (error) {
-      console.log(error);
+      setNotification('Invalid username or password.');
+      console.error(error);
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem('loggedInBloglistUser');
   };
@@ -58,6 +84,9 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
+
+      {notification && <Notification message={notification} />}
+
       <form onSubmit={handleLogin}>
         <div>
           <label>
@@ -102,8 +131,10 @@ const App = () => {
       setTitle('');
       setAuthor('');
       setUrl('');
+      setNotification(`A new blog "${title}" added`);
     } catch (error) {
-      console.log(error);
+      setNotification('Missing blog details.');
+      console.error(error);
     }
   };
 
@@ -151,7 +182,9 @@ const App = () => {
 
   return (
     <>
-      <h1>Blogs</h1>
+      <h2>Blogs</h2>
+
+      {notification && <Notification message={notification} />}
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>Logout</button>
@@ -163,6 +196,14 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       ))}
     </>
+  );
+};
+
+const Notification = ({ message }) => {
+  return (
+    <div>
+      <p>{message}</p>
+    </div>
   );
 };
 
