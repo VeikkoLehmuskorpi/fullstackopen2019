@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import blogService from './services/blogs';
 import loginService from './services/login';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    console.log('effect ran');
+
+    const fetchBlogs = async () => {
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
+    };
+
+    fetchBlogs();
+
+    return () => console.log('cleaning effect');
+  }, [user]);
 
   const handleLogin = async event => {
     event.preventDefault();
@@ -51,11 +66,19 @@ const App = () => {
     return loginForm();
   }
 
+  const Blog = ({ blog }) => {
+    return <p key={blog.id}>{blog.title}</p>;
+  };
+
   return (
     <>
       <h1>Blogs</h1>
 
       <p>{user.name} logged in</p>
+
+      {blogs.map(blog => (
+        <Blog key={blog.id} blog={blog} />
+      ))}
     </>
   );
 };
