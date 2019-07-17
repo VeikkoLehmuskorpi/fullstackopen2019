@@ -32,6 +32,6 @@ userSchema.set('toJSON', {
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
-const User = mongoose.model('BlogUser', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
