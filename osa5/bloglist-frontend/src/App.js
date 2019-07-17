@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
+import loginService from './services/login';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = event => {
+  const handleLogin = async event => {
     event.preventDefault();
-    setUser({ username, password });
+    try {
+      const user = await loginService.login({ username, password });
+      setUser(user);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const loginForm = () => (
     <div>
+      <h2>Log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
           <label>
@@ -40,13 +47,15 @@ const App = () => {
     </div>
   );
 
+  if (user === null) {
+    return loginForm();
+  }
+
   return (
     <>
-      <h1>Bloglist</h1>
+      <h1>Blogs</h1>
 
-      {loginForm()}
-
-      {user !== null ? <p>Logged in as {user.username}</p> : null}
+      <p>{user.name} logged in</p>
     </>
   );
 };
