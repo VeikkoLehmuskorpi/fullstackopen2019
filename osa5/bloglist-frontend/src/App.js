@@ -25,8 +25,6 @@ const App = () => {
       return;
     }
 
-    setNotification(notification);
-
     const interval = setTimeout(() => {
       console.log('5 seconds passed, removing message');
       setNotification(null);
@@ -54,7 +52,7 @@ const App = () => {
     try {
       fetchBlogs();
     } catch (error) {
-      setNotification(error.message);
+      setNotification({ message: error.message, color: 'red' });
       console.error(error);
     }
 
@@ -71,7 +69,7 @@ const App = () => {
       setUser(user);
       window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
     } catch (error) {
-      setNotification('Invalid username or password.');
+      setNotification({ message: 'Invalid username or password.', color: 'red' });
       console.error(error);
     }
   };
@@ -85,7 +83,7 @@ const App = () => {
     <div>
       <h2>Log in to application</h2>
 
-      {notification && <Notification message={notification} />}
+      {notification && <Notification notification={notification} />}
 
       <form onSubmit={handleLogin}>
         <div>
@@ -131,9 +129,9 @@ const App = () => {
       setTitle('');
       setAuthor('');
       setUrl('');
-      setNotification(`A new blog "${title}" added`);
+      setNotification({ message: `A new blog "${title}" added`, color: 'green' });
     } catch (error) {
-      setNotification('Missing blog details.');
+      setNotification({ message: 'Missing blog details.', color: 'red' });
       console.error(error);
     }
   };
@@ -184,7 +182,7 @@ const App = () => {
     <>
       <h2>Blogs</h2>
 
-      {notification && <Notification message={notification} />}
+      {notification && <Notification notification={notification} />}
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>Logout</button>
@@ -199,10 +197,18 @@ const App = () => {
   );
 };
 
-const Notification = ({ message }) => {
+const Notification = ({ notification }) => {
+  const divStyle = {
+    color: notification.color || 'black',
+    border: '.1rem solid #000',
+    borderColor: notification.color || 'black',
+    marginBottom: '1rem',
+    padding: '.4rem 1rem',
+  };
+
   return (
-    <div>
-      <p>{message}</p>
+    <div style={divStyle}>
+      <p>{notification.message}</p>
     </div>
   );
 };
