@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import LoginForm from './components/LoginForm';
+import Blog from './components/Blog';
+import BlogForm from './components/BlogForm';
+import Notification from './components/Notification';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -41,6 +45,18 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  const handleTitleChange = ({ target }) => {
+    setTitle(target.value);
+  };
+
+  const handleAuthorChange = ({ target }) => {
+    setAuthor(target.value);
+  };
+
+  const handleUrlChange = ({ target }) => {
+    setUrl(target.value);
+  };
+
   useEffect(() => {
     console.log('effect ran');
 
@@ -62,6 +78,14 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleUsernameChange = ({ target }) => {
+    setUsername(target.value);
+  };
+
+  const handlePasswordChange = ({ target }) => {
+    setPassword(target.value);
+  };
+
   const handleLogin = async event => {
     event.preventDefault();
     try {
@@ -79,47 +103,18 @@ const App = () => {
     window.localStorage.removeItem('loggedInBloglistUser');
   };
 
-  const loginForm = () => (
-    <div>
-      <h2>Log in to application</h2>
-
-      {notification && <Notification notification={notification} />}
-
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            Username:{' '}
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Password:{' '}
-            <input
-              type="text"
-              name="password"
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </label>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
-
   if (user === null) {
-    return loginForm();
+    return (
+      <LoginForm
+        handleLogin={handleLogin}
+        handleUsernameChange={handleUsernameChange}
+        handlePasswordChange={handlePasswordChange}
+        username={username}
+        password={password}
+        notification={notification}
+      />
+    );
   }
-
-  const Blog = ({ blog }) => {
-    return <p key={blog.id}>{blog.title}</p>;
-  };
 
   const handleCreateBlog = async event => {
     event.preventDefault();
@@ -136,48 +131,6 @@ const App = () => {
     }
   };
 
-  const blogForm = () => (
-    <div>
-      <h2>Create new</h2>
-      <form onSubmit={handleCreateBlog}>
-        <div>
-          <label>
-            Title:{' '}
-            <input
-              type="text"
-              name="title"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Author:{' '}
-            <input
-              type="text"
-              name="author"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            URL:{' '}
-            <input
-              type="text"
-              name="url"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </label>
-        </div>
-        <button type="submit">Create</button>
-      </form>
-    </div>
-  );
-
   return (
     <>
       <h2>Blogs</h2>
@@ -188,28 +141,20 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>Logout</button>
       </p>
 
-      {blogForm()}
+      <BlogForm
+        handleCreateBlog={handleCreateBlog}
+        handleTitleChange={handleTitleChange}
+        handleAuthorChange={handleAuthorChange}
+        handleUrlChange={handleUrlChange}
+        title={title}
+        author={author}
+        url={url}
+      />
 
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}
     </>
-  );
-};
-
-const Notification = ({ notification }) => {
-  const divStyle = {
-    color: notification.color || 'black',
-    border: '.1rem solid #000',
-    borderColor: notification.color || 'black',
-    marginBottom: '1rem',
-    padding: '.4rem 1rem',
-  };
-
-  return (
-    <div style={divStyle}>
-      <p>{notification.message}</p>
-    </div>
   );
 };
 
