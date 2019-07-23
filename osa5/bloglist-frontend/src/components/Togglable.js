@@ -11,14 +11,6 @@ const Togglable = React.forwardRef((props, ref) => {
     };
   });
 
-  if (props.condition !== null) {
-    return (
-      <>
-        <div>{props.children}</div>
-      </>
-    );
-  }
-
   if (visible) {
     return (
       <>
@@ -34,7 +26,6 @@ const Togglable = React.forwardRef((props, ref) => {
 export default Togglable;
 
 Togglable.defaultProps = {
-  condition: null,
   showLabel: 'Show',
   hideLabel: 'Cancel',
 };
