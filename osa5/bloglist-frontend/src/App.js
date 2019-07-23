@@ -89,6 +89,9 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  // blogForm ref
+  const blogFormRef = React.createRef();
+
   const handleTitleChange = ({ target }) => {
     setTitle(target.value);
   };
@@ -121,6 +124,7 @@ const App = () => {
 
   const handleCreateBlog = async event => {
     event.preventDefault();
+    blogFormRef.current.toggleVisibility();
     try {
       const newBlog = await blogService.createNew({ title, author, url }, user.token);
       setBlogs([...blogs, newBlog]);
@@ -149,7 +153,7 @@ const App = () => {
 
       <Notification notification={notification} />
 
-      <Togglable condition={user} showLabel="Login" hideLabel="Cancel">
+      <Togglable condition={user} showLabel="Login">
         <LoginForm
           user={user}
           handleLogin={handleLogin}
@@ -161,15 +165,17 @@ const App = () => {
         />
       </Togglable>
 
-      <BlogForm
-        handleCreateBlog={handleCreateBlog}
-        handleTitleChange={handleTitleChange}
-        handleAuthorChange={handleAuthorChange}
-        handleUrlChange={handleUrlChange}
-        title={title}
-        author={author}
-        url={url}
-      />
+      <Togglable showLabel="New note" ref={blogFormRef}>
+        <BlogForm
+          handleCreateBlog={handleCreateBlog}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+          title={title}
+          author={author}
+          url={url}
+        />
+      </Togglable>
 
       <BlogList blogs={blogs} />
     </>
