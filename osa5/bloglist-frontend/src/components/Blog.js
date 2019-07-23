@@ -11,26 +11,20 @@ const Blog = ({ blog }) => {
     margin: '0 0 1rem 0',
   };
 
-  if (detailsVisible) {
-    return (
-      <div style={blogStyle}>
-        <div onClick={toggleDetailsVisibility}>
-          {blog.title} {blog.author}
-        </div>
-        <div>{blog.url}</div>
-        <div>
-          {blog.likes} likes <button>like</button>
-        </div>
-        <div>added by {blog.user.name}</div>
-      </div>
-    );
-  }
-
   return (
     <div style={blogStyle}>
       <div onClick={toggleDetailsVisibility}>
         {blog.title} {blog.author}
       </div>
+      {detailsVisible ? (
+        <>
+          <div>{blog.url}</div>
+          <div>
+            {blog.likes} likes <button>like</button>
+          </div>
+          <div>added by {blog.user.name}</div>
+        </>
+      ) : null}
     </div>
   );
 };
