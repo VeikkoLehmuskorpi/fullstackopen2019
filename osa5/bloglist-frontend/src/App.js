@@ -13,21 +13,29 @@ const App = () => {
   //
   const [user, setUser] = useState(null);
 
+  // loginForm ref
+  const loginFormRef = React.createRef();
+
   useEffect(() => {
-    console.log('effect ran');
+    console.log('user effect ran');
 
     const userJSON = window.localStorage.getItem('loggedInBloglistUser');
     if (userJSON !== null) {
       setUser(JSON.parse(userJSON));
     }
 
-    return () => console.log('cleaning effect');
+    return () => {
+      console.log('cleaning user effect');
+    };
   }, []);
 
+  //
+  // notification
+  //
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    console.log('effect ran');
+    console.log('notification effect ran');
 
     if (notification === null) {
       return;
@@ -39,7 +47,7 @@ const App = () => {
     }, 5000);
 
     return () => {
-      console.log('cleaning effect');
+      console.log('cleaning notification effect');
       clearTimeout(interval);
     };
   }, [notification]);
@@ -105,7 +113,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log('effect ran');
+    console.log('blog effect ran');
 
     const fetchBlogs = async () => {
       const blogs = await blogService.getAll();
@@ -119,7 +127,7 @@ const App = () => {
       console.error(error);
     }
 
-    return () => console.log('cleaning effect');
+    return () => console.log('cleaning blog effect');
   }, [user]);
 
   const handleCreateBlog = async event => {
@@ -153,7 +161,7 @@ const App = () => {
 
       <Notification notification={notification} />
 
-      <Togglable condition={user} showLabel="Login">
+      <Togglable showLabel="Login" ref={loginFormRef}>
         <LoginForm
           user={user}
           handleLogin={handleLogin}
