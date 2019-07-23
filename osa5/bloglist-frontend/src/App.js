@@ -9,27 +9,6 @@ import Togglable from './components/Togglable';
 
 const App = () => {
   //
-  // user
-  //
-  const [user, setUser] = useState(null);
-
-  // loginForm ref
-  const loginFormRef = React.createRef();
-
-  useEffect(() => {
-    console.log('user effect ran');
-
-    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
-    if (userJSON !== null) {
-      setUser(JSON.parse(userJSON));
-    }
-
-    return () => {
-      console.log('cleaning user effect');
-    };
-  }, []);
-
-  //
   // notification
   //
   const [notification, setNotification] = useState(null);
@@ -53,8 +32,25 @@ const App = () => {
   }, [notification]);
 
   //
-  // credentials
+  // user
   //
+  const [user, setUser] = useState(null);
+
+  // loginForm ref
+  const loginFormRef = React.createRef();
+
+  useEffect(() => {
+    console.log('user effect ran');
+
+    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
+    if (userJSON !== null) {
+      setUser(JSON.parse(userJSON));
+    }
+
+    return () => {
+      console.log('cleaning user effect');
+    };
+  }, []);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -152,6 +148,16 @@ const App = () => {
     }
   };
 
+  const handleblogLike = async blog => {
+    const updatedFields = {
+      likes: blog.likes + 1,
+    };
+
+    const modifiedBlog = await blogService.update(blog, updatedFields, user.token);
+    console.log(modifiedBlog);
+    setBlogs([...blogs.filter(b => b.id !== blog.id), modifiedBlog]);
+  };
+
   //
   // render
   //
@@ -185,7 +191,7 @@ const App = () => {
         />
       </Togglable>
 
-      <BlogList blogs={blogs} user={user && user} />
+      <BlogList blogs={blogs} user={user && user} handleblogLike={handleblogLike} />
     </>
   );
 };

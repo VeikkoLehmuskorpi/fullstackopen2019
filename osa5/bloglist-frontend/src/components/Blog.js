@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import blogService from '../services/blogs';
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, handleblogLike }) => {
   const [detailsVisible, setDetailsVisible] = useState(false);
 
   const toggleDetailsVisibility = () => setDetailsVisible(!detailsVisible);
@@ -15,15 +15,6 @@ const Blog = ({ blog, user }) => {
   useEffect(() => {
     console.log(blog);
   }, [blog]);
-
-  const handleblogLike = async () => {
-    const updatedFields = {
-      likes: blog.likes + 1,
-    };
-
-    const modifiedBlog = await blogService.update(blog, updatedFields, user.token);
-    console.log(modifiedBlog);
-  };
 
   const handleBlogRemove = async () => {
     if (window.confirm(`Remove blog "${blog.title}"?`)) {
@@ -40,7 +31,7 @@ const Blog = ({ blog, user }) => {
         <>
           <div>{blog.url}</div>
           <div>
-            {blog.likes} likes <button onClick={handleblogLike}>like</button>
+            {blog.likes} likes <button onClick={() => handleblogLike(blog)}>like</button>
           </div>
           <div>added by {blog.user.name}</div>
           {blog.user.username === user.username ? (
