@@ -8,6 +8,9 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 
 const App = () => {
+  //
+  // user
+  //
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -41,6 +44,46 @@ const App = () => {
     };
   }, [notification]);
 
+  //
+  // credentials
+  //
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUsernameChange = ({ target }) => {
+    setUsername(target.value);
+  };
+
+  const handlePasswordChange = ({ target }) => {
+    setPassword(target.value);
+  };
+
+  const handleLogin = async event => {
+    event.preventDefault();
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
+    } catch (error) {
+      setNotification({
+        message: 'Invalid username or password.',
+        color: 'red',
+      });
+      console.error(error);
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem('loggedInBloglistUser');
+  };
+
+  //
+  // blogs
+  //
   const [blogs, setBlogs] = useState([]);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -76,34 +119,6 @@ const App = () => {
     return () => console.log('cleaning effect');
   }, [user]);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleUsernameChange = ({ target }) => {
-    setUsername(target.value);
-  };
-
-  const handlePasswordChange = ({ target }) => {
-    setPassword(target.value);
-  };
-
-  const handleLogin = async event => {
-    event.preventDefault();
-    try {
-      const user = await loginService.login({ username, password });
-      setUser(user);
-      window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
-    } catch (error) {
-      setNotification({ message: 'Invalid username or password.', color: 'red' });
-      console.error(error);
-    }
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem('loggedInBloglistUser');
-  };
-
   const handleCreateBlog = async event => {
     event.preventDefault();
     try {
@@ -112,13 +127,22 @@ const App = () => {
       setTitle('');
       setAuthor('');
       setUrl('');
-      setNotification({ message: `A new blog "${title}" added`, color: 'green' });
+      setNotification({
+        message: `A new blog "${title}" added`,
+        color: 'green',
+      });
     } catch (error) {
-      setNotification({ message: 'Missing blog details.', color: 'red' });
+      setNotification({
+        message: 'Missing blog details.',
+        color: 'red',
+      });
       console.error(error);
     }
   };
 
+  //
+  // render
+  //
   return (
     <>
       <h2>Blogs</h2>
