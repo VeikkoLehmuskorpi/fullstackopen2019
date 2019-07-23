@@ -185,7 +185,7 @@ const App = () => {
         />
       </Togglable>
 
-      <BlogList blogs={blogs} />
+      <BlogList blogs={blogs} token={user && user.token} />
     </>
   );
 };
