@@ -103,7 +103,9 @@ const App = () => {
     window.localStorage.removeItem('loggedInBloglistUser');
   };
 
-  if (user === null) {
+  const [loginVisible, setLoginVisible] = useState(false);
+
+  const loginForm = () => {
     return (
       <LoginForm
         handleLogin={handleLogin}
@@ -111,10 +113,14 @@ const App = () => {
         handlePasswordChange={handlePasswordChange}
         username={username}
         password={password}
-        notification={notification}
+        handleLoginButtons={handleLoginButtons}
       />
     );
-  }
+  };
+
+  const handleLoginButtons = () => {
+    setLoginVisible(!loginVisible);
+  };
 
   const handleCreateBlog = async event => {
     event.preventDefault();
@@ -137,9 +143,7 @@ const App = () => {
 
       {notification && <Notification notification={notification} />}
 
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>Logout</button>
-      </p>
+      {loginVisible ? loginForm() : <button onClick={handleLoginButtons}>Login</button>}
 
       <BlogForm
         handleCreateBlog={handleCreateBlog}

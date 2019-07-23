@@ -1,5 +1,4 @@
 import React from 'react';
-import Notification from './Notification';
 
 const LoginForm = ({
   handleLogin,
@@ -7,13 +6,11 @@ const LoginForm = ({
   handlePasswordChange,
   username,
   password,
-  notification,
+  handleLoginButtons,
 }) => {
   return (
     <div>
       <h2>Log in to application</h2>
-
-      {notification && <Notification notification={notification} />}
 
       <form onSubmit={handleLogin}>
         <div>
@@ -29,6 +26,9 @@ const LoginForm = ({
           </label>
         </div>
         <button type="submit">Login</button>
+        <button type="button" onClick={handleLoginButtons}>
+          Cancel
+        </button>
       </form>
     </div>
   );
