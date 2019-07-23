@@ -149,7 +149,7 @@ const App = () => {
 
       <Notification notification={notification} />
 
-      <Togglable showLabel="Login" hideLabel="Cancel">
+      <Togglable condition={user} showLabel="Login" hideLabel="Cancel">
         <LoginForm
           user={user}
           handleLogin={handleLogin}

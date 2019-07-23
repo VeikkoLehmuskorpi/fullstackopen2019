@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 
-const Togglable = ({ children, showLabel, hideLabel }) => {
+const Togglable = ({ children, condition, showLabel, hideLabel }) => {
   const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => setVisible(!visible);
+
+  if (condition !== null) {
+    return (
+      <>
+        <div>{children}</div>
+      </>
+    );
+  }
 
   if (visible) {
     return (
