@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs';
 
 const Blog = ({ blog, user, handleblogLike, handleBlogRemove }) => {
   const [detailsVisible, setDetailsVisible] = useState(false);
@@ -21,10 +20,10 @@ const Blog = ({ blog, user, handleblogLike, handleBlogRemove }) => {
         <>
           <div>{blog.url}</div>
           <div>
-            {blog.likes} likes <button onClick={() => handleblogLike(blog)}>like</button>
+            {blog.likes} likes {user && <button onClick={() => handleblogLike(blog)}>like</button>}
           </div>
           <div>added by {blog.user.name}</div>
-          {blog.user.username === user.username ? (
+          {user && blog.user.username === user.username ? (
             <button onClick={() => handleBlogRemove(blog)}>Remove</button>
           ) : null}
         </>
