@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import LoginForm from './components/LoginForm';
-import Blog from './components/Blog';
+import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
@@ -123,7 +123,7 @@ const App = () => {
     <>
       <h2>Blogs</h2>
 
-      {notification && <Notification notification={notification} />}
+      <Notification notification={notification} />
 
       <Togglable showLabel="Login" hideLabel="Cancel">
         <LoginForm
@@ -147,9 +147,7 @@ const App = () => {
         url={url}
       />
 
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <BlogList blogs={blogs} />
     </>
   );
 };
