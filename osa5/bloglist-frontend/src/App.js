@@ -114,6 +114,7 @@ const App = () => {
     const fetchBlogs = async () => {
       const blogs = await blogService.getAll();
       setBlogs(blogs);
+      console.log(blogs);
     };
 
     try {
@@ -153,9 +154,21 @@ const App = () => {
       likes: blog.likes + 1,
     };
 
-    const modifiedBlog = await blogService.update(blog, updatedFields, user.token);
+    let modifiedBlog = await blogService.update(blog, updatedFields, user.token);
+    modifiedBlog.user = {
+      id: modifiedBlog.user,
+      name: user.name,
+      username: user.username,
+    };
     console.log(modifiedBlog);
     setBlogs([...blogs.filter(b => b.id !== blog.id), modifiedBlog]);
+  };
+
+  const handleBlogRemove = async blog => {
+    if (window.confirm(`Remove blog "${blog.title}"?`)) {
+      await blogService.remove(blog, user.token);
+      setBlogs([...blogs.filter(b => b.id !== blog.id)]);
+    }
   };
 
   //
@@ -191,7 +204,12 @@ const App = () => {
         />
       </Togglable>
 
-      <BlogList blogs={blogs} user={user && user} handleblogLike={handleblogLike} />
+      <BlogList
+        blogs={blogs}
+        user={user && user}
+        handleblogLike={handleblogLike}
+        handleBlogRemove={handleBlogRemove}
+      />
     </>
   );
 };
