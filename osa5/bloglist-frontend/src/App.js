@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -103,25 +104,6 @@ const App = () => {
     window.localStorage.removeItem('loggedInBloglistUser');
   };
 
-  const [loginVisible, setLoginVisible] = useState(false);
-
-  const loginForm = () => {
-    return (
-      <LoginForm
-        handleLogin={handleLogin}
-        handleUsernameChange={handleUsernameChange}
-        handlePasswordChange={handlePasswordChange}
-        username={username}
-        password={password}
-        handleLoginButtons={handleLoginButtons}
-      />
-    );
-  };
-
-  const handleLoginButtons = () => {
-    setLoginVisible(!loginVisible);
-  };
-
   const handleCreateBlog = async event => {
     event.preventDefault();
     try {
@@ -143,7 +125,17 @@ const App = () => {
 
       {notification && <Notification notification={notification} />}
 
-      {loginVisible ? loginForm() : <button onClick={handleLoginButtons}>Login</button>}
+      <Togglable showLabel="Login" hideLabel="Cancel">
+        <LoginForm
+          user={user}
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          handleUsernameChange={handleUsernameChange}
+          handlePasswordChange={handlePasswordChange}
+          username={username}
+          password={password}
+        />
+      </Togglable>
 
       <BlogForm
         handleCreateBlog={handleCreateBlog}

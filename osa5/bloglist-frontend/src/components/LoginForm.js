@@ -1,13 +1,22 @@
 import React from 'react';
 
 const LoginForm = ({
+  user,
   handleLogin,
+  handleLogout,
   handleUsernameChange,
   handlePasswordChange,
   username,
   password,
-  handleLoginButtons,
 }) => {
+  if (user !== null)
+    return (
+      <div>
+        <p>Logged in as {user.username}</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    );
+
   return (
     <div>
       <h2>Log in to application</h2>
@@ -26,9 +35,6 @@ const LoginForm = ({
           </label>
         </div>
         <button type="submit">Login</button>
-        <button type="button" onClick={handleLoginButtons}>
-          Cancel
-        </button>
       </form>
     </div>
   );
