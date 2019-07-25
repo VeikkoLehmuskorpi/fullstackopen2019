@@ -1,11 +1,8 @@
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
-import { render, cleanup } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { prettyDOM } from '@testing-library/dom';
 import Blog from './Blog';
 import { handleBlogLike, handleBlogRemove } from '../app';
-
-afterEach(cleanup);
 
 test('renders content', () => {
   const blog = {
