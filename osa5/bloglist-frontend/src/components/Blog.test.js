@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, cleanup } from '@testing-library/react';
+import { prettyDOM } from '@testing-library/dom';
 import Blog from './Blog';
 import { handleBlogLike, handleBlogRemove } from '../app';
 
@@ -19,7 +20,24 @@ test('renders content', () => {
     ></Blog>
   );
 
+  component.debug();
+
+  console.log(prettyDOM(component.container.querySelector('.blog > div')));
+
+  // method 1
   expect(component.container).toHaveTextContent(
+    'Component testing is done with react-testing-library'
+  );
+
+  // method 2
+  const element = component.getByText(
+    'Component testing is done with react-testing-library'
+  );
+  expect(element).toBeDefined();
+
+  // method 3
+  const div = component.container.querySelector('.blog');
+  expect(div).toHaveTextContent(
     'Component testing is done with react-testing-library'
   );
 });
