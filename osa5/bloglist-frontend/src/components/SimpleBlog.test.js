@@ -41,7 +41,8 @@ describe('<SimpleBlog/>', () => {
 
     const likeButton = getByText('like');
     fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
 
-    expect(onClick).toHaveBeenCalled();
+    expect(onClick).toHaveBeenCalledTimes(2);
   });
 });
