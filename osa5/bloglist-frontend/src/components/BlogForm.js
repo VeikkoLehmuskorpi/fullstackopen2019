@@ -15,20 +15,38 @@ const BlogForm = ({
       <form onSubmit={handleCreateBlog}>
         <div>
           <label>
-            Title: <input type="text" name="title" value={title} onChange={handleTitleChange} />
+            Title:{' '}
+            <input
+              type='text'
+              name='title'
+              value={title}
+              onChange={handleTitleChange}
+            />
           </label>
         </div>
         <div>
           <label>
-            Author: <input type="text" name="author" value={author} onChange={handleAuthorChange} />
+            Author:{' '}
+            <input
+              type='text'
+              name='author'
+              value={author}
+              onChange={handleAuthorChange}
+            />
           </label>
         </div>
         <div>
           <label>
-            URL: <input type="text" name="url" value={url} onChange={handleUrlChange} />
+            URL:{' '}
+            <input
+              type='text'
+              name='url'
+              value={url}
+              onChange={handleUrlChange}
+            />
           </label>
         </div>
-        <button type="submit">Create</button>
+        <button type='submit'>Create</button>
       </form>
     </div>
   );

@@ -131,7 +131,10 @@ const App = () => {
     event.preventDefault();
     blogFormRef.current.toggleVisibility();
     try {
-      const newBlog = await blogService.createNew({ title, author, url }, user.token);
+      const newBlog = await blogService.createNew(
+        { title, author, url },
+        user.token
+      );
       setBlogs([...blogs, newBlog]);
       setTitle('');
       setAuthor('');
@@ -154,13 +157,14 @@ const App = () => {
       likes: blog.likes + 1,
     };
 
-    let modifiedBlog = await blogService.update(blog, updatedFields, user.token);
+    let modifiedBlog = await blogService.update(blog, updatedFields);
+
     modifiedBlog.user = {
-      id: modifiedBlog.user,
-      name: user.name,
-      username: user.username,
+      id: blog.user.id,
+      name: blog.user.name,
+      username: blog.user.username,
     };
-    console.log(modifiedBlog);
+
     setBlogs([...blogs.filter(b => b.id !== blog.id), modifiedBlog]);
   };
 
@@ -180,7 +184,7 @@ const App = () => {
 
       <Notification notification={notification} />
 
-      <Togglable showLabel="Login" ref={loginFormRef}>
+      <Togglable showLabel='Login' ref={loginFormRef}>
         <LoginForm
           user={user}
           handleLogin={handleLogin}
@@ -192,7 +196,7 @@ const App = () => {
         />
       </Togglable>
 
-      <Togglable showLabel="New note" ref={blogFormRef}>
+      <Togglable showLabel='New note' ref={blogFormRef}>
         <BlogForm
           handleCreateBlog={handleCreateBlog}
           handleTitleChange={handleTitleChange}
