@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useField } from './hooks';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import LoginForm from './components/LoginForm';
@@ -51,24 +52,22 @@ const App = () => {
       console.log('cleaning user effect');
     };
   }, []);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleUsernameChange = ({ target }) => {
-    setUsername(target.value);
-  };
-
-  const handlePasswordChange = ({ target }) => {
-    setPassword(target.value);
-  };
+  const usernameField = useField('text');
+  const passwordField = useField('text');
 
   const handleLogin = async event => {
     event.preventDefault();
+
+    const username = usernameField.value;
+    const password = passwordField.value;
+
     try {
       const user = await loginService.login({
         username,
         password,
       });
+
       setUser(user);
       window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
     } catch (error) {
@@ -76,12 +75,15 @@ const App = () => {
         message: 'Invalid username or password.',
         color: 'red',
       });
+
       console.error(error);
     }
   };
 
   const handleLogout = () => {
     setUser(null);
+    usernameField.reset();
+    passwordField.reset();
     window.localStorage.removeItem('loggedInBloglistUser');
   };
 
@@ -89,24 +91,12 @@ const App = () => {
   // blogs
   //
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  const titleField = useField('text');
+  const authorField = useField('text');
+  const urlField = useField('text');
 
   // blogForm ref
   const blogFormRef = React.createRef();
-
-  const handleTitleChange = ({ target }) => {
-    setTitle(target.value);
-  };
-
-  const handleAuthorChange = ({ target }) => {
-    setAuthor(target.value);
-  };
-
-  const handleUrlChange = ({ target }) => {
-    setUrl(target.value);
-  };
 
   useEffect(() => {
     console.log('blog effect ran');
@@ -121,6 +111,7 @@ const App = () => {
       fetchBlogs();
     } catch (error) {
       setNotification({ message: error.message, color: 'red' });
+
       console.error(error);
     }
 
@@ -129,16 +120,25 @@ const App = () => {
 
   const handleCreateBlog = async event => {
     event.preventDefault();
+
     blogFormRef.current.toggleVisibility();
+
+    const title = titleField.value;
+    const author = authorField.value;
+    const url = urlField.value;
+
     try {
       const newBlog = await blogService.createNew(
         { title, author, url },
         user.token
       );
+
       setBlogs([...blogs, newBlog]);
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+
+      titleField.reset();
+      authorField.reset();
+      urlField.reset();
+
       setNotification({
         message: `A new blog "${title}" added`,
         color: 'green',
@@ -148,6 +148,7 @@ const App = () => {
         message: 'Missing blog details.',
         color: 'red',
       });
+
       console.error(error);
     }
   };
@@ -189,24 +190,21 @@ const App = () => {
           user={user}
           handleLogin={handleLogin}
           handleLogout={handleLogout}
-          handleUsernameChange={handleUsernameChange}
-          handlePasswordChange={handlePasswordChange}
-          username={username}
-          password={password}
+          usernameField={usernameField}
+          passwordField={passwordField}
         />
       </Togglable>
 
-      <Togglable showLabel='New note' ref={blogFormRef}>
-        <BlogForm
-          handleCreateBlog={handleCreateBlog}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
-          title={title}
-          author={author}
-          url={url}
-        />
-      </Togglable>
+      {user && (
+        <Togglable showLabel='New note' ref={blogFormRef}>
+          <BlogForm
+            handleCreateBlog={handleCreateBlog}
+            titleField={titleField}
+            authorField={authorField}
+            urlField={urlField}
+          />
+        </Togglable>
+      )}
 
       {user && (
         <BlogList

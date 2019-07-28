@@ -1,14 +1,6 @@
 import React from 'react';
 
-const BlogForm = ({
-  handleCreateBlog,
-  handleTitleChange,
-  handleAuthorChange,
-  handleUrlChange,
-  title,
-  author,
-  url,
-}) => {
+const BlogForm = ({ handleCreateBlog, titleField, authorField, urlField }) => {
   return (
     <div>
       <h2>Create new</h2>
@@ -19,8 +11,8 @@ const BlogForm = ({
             <input
               type='text'
               name='title'
-              value={title}
-              onChange={handleTitleChange}
+              value={titleField.value}
+              onChange={titleField.onChange}
             />
           </label>
         </div>
@@ -30,8 +22,8 @@ const BlogForm = ({
             <input
               type='text'
               name='author'
-              value={author}
-              onChange={handleAuthorChange}
+              value={authorField.value}
+              onChange={authorField.onChange}
             />
           </label>
         </div>
@@ -41,8 +33,8 @@ const BlogForm = ({
             <input
               type='text'
               name='url'
-              value={url}
-              onChange={handleUrlChange}
+              value={urlField.value}
+              onChange={urlField.onChange}
             />
           </label>
         </div>

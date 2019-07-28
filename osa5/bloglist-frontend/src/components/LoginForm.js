@@ -4,10 +4,8 @@ const LoginForm = ({
   user,
   handleLogin,
   handleLogout,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
+  usernameField,
+  passwordField,
 }) => {
   if (user !== null)
     return (
@@ -28,8 +26,8 @@ const LoginForm = ({
             <input
               type='text'
               name='username'
-              value={username}
-              onChange={handleUsernameChange}
+              value={usernameField.value}
+              onChange={usernameField.onChange}
             />
           </label>
         </div>
@@ -39,8 +37,8 @@ const LoginForm = ({
             <input
               type='text'
               name='password'
-              value={password}
-              onChange={handlePasswordChange}
+              value={passwordField.value}
+              onChange={passwordField.onChange}
             />
           </label>
         </div>
