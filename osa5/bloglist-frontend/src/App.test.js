@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitForElement } from '@testing-library/react';
-jest.mock('./services/blogs');
+jest.mock('./hooks/index.js');
 import App from './App';
 
 describe('<App />', () => {
@@ -42,7 +42,7 @@ describe('<App />', () => {
     expect(blogs.length).toBe(0);
   });
 
-  test('doesnt render blogs without a logged in user', async () => {
+  test('renders blogs a logged in user', async () => {
     // login
     const user = {
       username: 'tester',
