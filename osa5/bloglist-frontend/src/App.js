@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useField } from './hooks';
-import blogService from './services/blogs';
+import { useField, useResource } from './hooks';
 import loginService from './services/login';
 import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
@@ -90,7 +89,7 @@ const App = () => {
   //
   // blogs
   //
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, blogService] = useResource('http://localhost:3002/api/blogs');
   const titleField = useField('text');
   const authorField = useField('text');
   const urlField = useField('text');
@@ -98,14 +97,12 @@ const App = () => {
   // blogForm ref
   const blogFormRef = React.createRef();
 
+  const fetchBlogs = async () => {
+    await blogService.getAll();
+  };
+
   useEffect(() => {
     console.log('blog effect ran');
-
-    const fetchBlogs = async () => {
-      const blogs = await blogService.getAll();
-      setBlogs(blogs);
-      console.log(blogs);
-    };
 
     try {
       fetchBlogs();
@@ -128,12 +125,7 @@ const App = () => {
     const url = urlField.value;
 
     try {
-      const newBlog = await blogService.createNew(
-        { title, author, url },
-        user.token
-      );
-
-      setBlogs([...blogs, newBlog]);
+      await blogService.create({ title, author, url }, user.token);
 
       titleField.reset();
       authorField.reset();
@@ -158,21 +150,12 @@ const App = () => {
       likes: blog.likes + 1,
     };
 
-    let modifiedBlog = await blogService.update(blog, updatedFields);
-
-    modifiedBlog.user = {
-      id: blog.user.id,
-      name: blog.user.name,
-      username: blog.user.username,
-    };
-
-    setBlogs([...blogs.filter(b => b.id !== blog.id), modifiedBlog]);
+    await blogService.update(blog, updatedFields, user.token);
   };
 
   const handleBlogRemove = async blog => {
     if (window.confirm(`Remove blog "${blog.title}"?`)) {
       await blogService.remove(blog, user.token);
-      setBlogs([...blogs.filter(b => b.id !== blog.id)]);
     }
   };
 
