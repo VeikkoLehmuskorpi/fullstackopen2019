@@ -208,12 +208,14 @@ const App = () => {
         />
       </Togglable>
 
-      <BlogList
-        blogs={blogs}
-        user={user && user}
-        handleblogLike={handleblogLike}
-        handleBlogRemove={handleBlogRemove}
-      />
+      {user && (
+        <BlogList
+          blogs={blogs}
+          user={user && user}
+          handleblogLike={handleblogLike}
+          handleBlogRemove={handleBlogRemove}
+        />
+      )}
     </>
   );
 };
