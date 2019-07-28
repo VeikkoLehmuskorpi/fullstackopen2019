@@ -41,4 +41,22 @@ describe('<App />', () => {
     const blogs = component.container.querySelectorAll('.blog');
     expect(blogs.length).toBe(0);
   });
+
+  test('doesnt render blogs without a logged in user', async () => {
+    // login
+    const user = {
+      username: 'tester',
+      token: '1231231214',
+      name: 'Donald Tester',
+    };
+
+    localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
+
+    const component = render(<App />);
+
+    await waitForElement(() => component.getByText('Login'));
+
+    const blogs = component.container.querySelectorAll('.blog');
+    expect(blogs.length).toBe(3);
+  });
 });
