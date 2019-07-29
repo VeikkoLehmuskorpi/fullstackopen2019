@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'uuid/v4';
 
 const App = ({ store }) => {
   const anecdotes = store.getState();
@@ -7,9 +8,23 @@ const App = ({ store }) => {
     console.log('vote', id);
 
     store.dispatch({
-      type: 'VOTE',
+      type: 'VOTE_ANECDOTE',
       data: {
         id,
+      },
+    });
+  };
+
+  const addAnecdote = event => {
+    event.preventDefault();
+
+    const content = event.target.anecdote.value;
+    store.dispatch({
+      type: 'ADD_ANECDOTE',
+      data: {
+        content,
+        id: uuid(),
+        votes: 0,
       },
     });
   };
@@ -27,11 +42,11 @@ const App = ({ store }) => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={event => addAnecdote(event)}>
         <div>
-          <input />
+          <input name="anecdote" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   );
