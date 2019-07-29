@@ -2,6 +2,17 @@ import React from 'react';
 import { voteAnecdote, createAnecdote } from './reducers/anecdoteReducer';
 
 const App = ({ store }) => {
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <AnecdoteList store={store} />
+      <h2>create new</h2>
+      <AnecdoteForm store={store} />
+    </div>
+  );
+};
+
+const AnecdoteForm = ({ store }) => {
   const addAnecdote = event => {
     event.preventDefault();
 
@@ -10,17 +21,12 @@ const App = ({ store }) => {
   };
 
   return (
-    <div>
-      <h2>Anecdotes</h2>
-      <AnecdoteList store={store} />
-      <h2>create new</h2>
-      <form onSubmit={event => addAnecdote(event)}>
-        <div>
-          <input name="anecdote" />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
+    <form onSubmit={event => addAnecdote(event)}>
+      <div>
+        <input name="anecdote" />
+      </div>
+      <button type="submit">create</button>
+    </form>
   );
 };
 
