@@ -1,5 +1,5 @@
 import React from 'react';
-import uuid from 'uuid/v4';
+import { voteAnecdote, createAnecdote } from './reducers/anecdoteReducer';
 
 const App = ({ store }) => {
   const anecdotes = store.getState();
@@ -7,26 +7,14 @@ const App = ({ store }) => {
   const vote = id => {
     console.log('vote', id);
 
-    store.dispatch({
-      type: 'VOTE_ANECDOTE',
-      data: {
-        id,
-      },
-    });
+    store.dispatch(voteAnecdote(id));
   };
 
   const addAnecdote = event => {
     event.preventDefault();
 
     const content = event.target.anecdote.value;
-    store.dispatch({
-      type: 'ADD_ANECDOTE',
-      data: {
-        content,
-        id: uuid(),
-        votes: 0,
-      },
-    });
+    store.dispatch(createAnecdote(content));
   };
 
   return (
