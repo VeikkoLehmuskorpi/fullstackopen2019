@@ -9,7 +9,6 @@ describe('unicafe reducer', () => {
   };
 
   test('should return a proper initial state when called with undefined state', () => {
-    const state = {};
     const action = {
       type: 'DO_NOTHING',
     };
@@ -22,6 +21,7 @@ describe('unicafe reducer', () => {
     const action = {
       type: 'GOOD',
     };
+
     const state = initialState;
 
     deepFreeze(state);

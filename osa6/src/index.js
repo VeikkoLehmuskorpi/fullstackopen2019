@@ -12,15 +12,51 @@ const App = () => {
     });
   };
 
+  const neutral = () => {
+    store.dispatch({
+      type: 'OK',
+    });
+  };
+
+  const bad = () => {
+    store.dispatch({
+      type: 'BAD',
+    });
+  };
+
+  const zero = () => {
+    store.dispatch({
+      type: 'ZERO',
+    });
+  };
+
+  const goodValue = store.getState().good;
+  const neutralValue = store.getState().ok;
+  const badValue = store.getState().bad;
+
   return (
     <div>
+      <h2>give feedback</h2>
+
       <button onClick={good}>hyvä</button>
-      <button>neutraali</button>
-      <button>huono</button>
-      <button>nollaa tilastot</button>
-      <div>hyvä {store.getState().good}</div>
-      <div>neutraali</div>
-      <div>huono</div>
+      <button onClick={neutral}>neutraali</button>
+      <button onClick={bad}>huono</button>
+      <button onClick={zero}>nollaa tilastot</button>
+
+      <h2>statistics</h2>
+
+      {goodValue + neutralValue + badValue !== 0 ? (
+        <>
+          <div>good {goodValue}</div>
+          <div>neutral {neutralValue}</div>
+          <div>bad {badValue}</div>
+          <div>all {goodValue + neutralValue + badValue}</div>
+          <div>average {(goodValue - badValue) / (goodValue + neutralValue + badValue)}</div>
+          <div>positive {(goodValue / (goodValue + neutralValue + badValue)) * 100} %</div>
+        </>
+      ) : (
+        <div>No feedback given</div>
+      )}
     </div>
   );
 };
