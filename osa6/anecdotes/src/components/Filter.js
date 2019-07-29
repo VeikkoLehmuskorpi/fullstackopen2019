@@ -1,16 +1,17 @@
 import React from 'react';
 import { filterSet, filterRemove } from '../reducers/filterReducer';
+import { connect } from 'react-redux';
 
-const Filter = ({ store }) => {
+const Filter = ({ filterRemove, filterSet }) => {
   const handleChange = event => {
     const content = event.target.value;
 
     if (content === '') {
-      store.dispatch(filterRemove());
+      filterRemove();
       return;
     }
 
-    store.dispatch(filterSet(content));
+    filterSet(content);
   };
 
   const style = {
@@ -24,4 +25,14 @@ const Filter = ({ store }) => {
   );
 };
 
-export default Filter;
+const mapDispatchToProps = {
+  filterRemove,
+  filterSet,
+};
+
+const ConnectedFilter = connect(
+  null,
+  mapDispatchToProps,
+)(Filter);
+
+export default ConnectedFilter;

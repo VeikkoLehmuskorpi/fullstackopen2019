@@ -1,12 +1,13 @@
 import React from 'react';
 import { createAnecdote } from '../reducers/anecdoteReducer';
+import { connect } from 'react-redux';
 
-const AnecdoteForm = ({ store }) => {
+const AnecdoteForm = ({ createAnecdote }) => {
   const addAnecdote = event => {
     event.preventDefault();
 
     const content = event.target.anecdote.value;
-    store.dispatch(createAnecdote(content));
+    createAnecdote(content);
   };
 
   return (
@@ -19,4 +20,13 @@ const AnecdoteForm = ({ store }) => {
   );
 };
 
-export default AnecdoteForm;
+const mapDispatchToProps = {
+  createAnecdote,
+};
+
+const ConnectedAnecdoteForm = connect(
+  null,
+  mapDispatchToProps,
+)(AnecdoteForm);
+
+export default ConnectedAnecdoteForm;
