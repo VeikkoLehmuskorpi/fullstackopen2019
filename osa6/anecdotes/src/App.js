@@ -2,14 +2,6 @@ import React from 'react';
 import { voteAnecdote, createAnecdote } from './reducers/anecdoteReducer';
 
 const App = ({ store }) => {
-  const anecdotes = store.getState();
-
-  const vote = id => {
-    console.log('vote', id);
-
-    store.dispatch(voteAnecdote(id));
-  };
-
   const addAnecdote = event => {
     event.preventDefault();
 
@@ -20,15 +12,7 @@ const App = ({ store }) => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
-        <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
-          </div>
-        </div>
-      ))}
+      <AnecdoteList store={store} />
       <h2>create new</h2>
       <form onSubmit={event => addAnecdote(event)}>
         <div>
@@ -36,6 +20,32 @@ const App = ({ store }) => {
         </div>
         <button type="submit">create</button>
       </form>
+    </div>
+  );
+};
+
+const AnecdoteList = ({ store }) => {
+  const anecdotes = store.getState();
+
+  const vote = id => {
+    console.log('vote', id);
+
+    store.dispatch(voteAnecdote(id));
+  };
+
+  return anecdotes.map(anecdote => (
+    <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => vote(anecdote.id)} />
+  ));
+};
+
+const Anecdote = ({ anecdote, handleClick }) => {
+  return (
+    <div key={anecdote.id}>
+      <div>{anecdote.content}</div>
+      <div>
+        has {anecdote.votes}
+        <button onClick={handleClick}>vote</button>
+      </div>
     </div>
   );
 };
