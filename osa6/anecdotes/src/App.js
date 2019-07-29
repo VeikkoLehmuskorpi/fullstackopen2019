@@ -9,7 +9,7 @@ const App = ({ store }) => {
     <div>
       <Notification store={store} />
       <h2>Anecdotes</h2>
-      <Filter />
+      <Filter store={store} />
       <AnecdoteList store={store} />
       <h2>create new</h2>
       <AnecdoteForm store={store} />

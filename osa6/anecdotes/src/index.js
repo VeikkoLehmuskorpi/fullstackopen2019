@@ -4,21 +4,15 @@ import { createStore, combineReducers } from 'redux';
 import App from './App';
 import anecdoteReducer from './reducers/anecdoteReducer';
 import notificationReducer from './reducers/notificationReducer';
+import filterReducer from './reducers/filterReducer';
 
 const reducer = combineReducers({
   anecdotes: anecdoteReducer,
   notification: notificationReducer,
+  filter: filterReducer,
 });
 
 const store = createStore(reducer);
-
-store.dispatch({
-  type: 'SET_NOTIFICATION',
-  data: {
-    message: 'Lorem ipsum dolor sit amet',
-    type: 'success',
-  },
-});
 
 console.log(store.getState());
 

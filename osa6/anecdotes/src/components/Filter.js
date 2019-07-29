@@ -1,8 +1,16 @@
 import React from 'react';
+import { filterSet, filterRemove } from '../reducers/filterReducer';
 
-const Filter = () => {
+const Filter = ({ store }) => {
   const handleChange = event => {
-    console.log(event.target.value);
+    const content = event.target.value;
+
+    if (content === '') {
+      store.dispatch(filterRemove());
+      return;
+    }
+
+    store.dispatch(filterSet(content));
   };
 
   const style = {
