@@ -4,17 +4,7 @@ import { notificationSet, notificationRemove } from '../reducers/notificationRed
 import { connect } from 'react-redux';
 import Anecdote from './Anecdote';
 
-const AnecdoteList = ({ anecdotes, filter, voteAnecdote, notificationSet, notificationRemove }) => {
-  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes);
-
-  const anecdotesToShow = () => {
-    if (filter === '') return sortedAnecdotes;
-
-    return sortedAnecdotes.filter(anecdote =>
-      anecdote.content.toLowerCase().includes(filter.toLowerCase()),
-    );
-  };
-
+const AnecdoteList = ({ visibleAnecdotes, voteAnecdote, notificationSet, notificationRemove }) => {
   const vote = ({ content, id }) => {
     console.log('vote', id);
 
@@ -29,15 +19,25 @@ const AnecdoteList = ({ anecdotes, filter, voteAnecdote, notificationSet, notifi
     }, 5000);
   };
 
-  return anecdotesToShow().map(anecdote => (
+  return visibleAnecdotes.map(anecdote => (
     <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => vote(anecdote)} />
   ));
 };
 
+const anecdotesToShow = ({ anecdotes, filter }) => {
+  if (filter === '') return sortedAnecdotes(anecdotes);
+
+  const filteredAnecdotes = anecdotes.filter(anecdote =>
+    anecdote.content.toLowerCase().includes(filter.toLowerCase()),
+  );
+  return sortedAnecdotes(filteredAnecdotes);
+};
+
+const sortedAnecdotes = anecdotes => anecdotes.sort((a, b) => b.votes - a.votes);
+
 const mapStateToProps = state => {
   return {
-    anecdotes: state.anecdotes,
-    filter: state.filter,
+    visibleAnecdotes: anecdotesToShow(state),
   };
 };
 
