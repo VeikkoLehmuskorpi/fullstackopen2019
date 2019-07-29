@@ -4,9 +4,17 @@ import { notificationSet, notificationRemove } from '../reducers/notificationRed
 import Anecdote from './Anecdote';
 
 const AnecdoteList = ({ store }) => {
-  const { anecdotes } = store.getState();
+  const { anecdotes, filter } = store.getState();
 
   const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes);
+
+  const anecdotesToShow = () => {
+    if (filter === '') return sortedAnecdotes;
+
+    return sortedAnecdotes.filter(anecdote =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase()),
+    );
+  };
 
   const vote = ({ content, id }) => {
     console.log('vote', id);
@@ -22,7 +30,7 @@ const AnecdoteList = ({ store }) => {
     }, 5000);
   };
 
-  return sortedAnecdotes.map(anecdote => (
+  return anecdotesToShow().map(anecdote => (
     <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => vote(anecdote)} />
   ));
 };
