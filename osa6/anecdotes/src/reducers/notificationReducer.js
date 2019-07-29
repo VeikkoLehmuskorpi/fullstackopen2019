@@ -8,7 +8,7 @@ const reducer = (state = initialState, action) => {
         type: action.data.type.toLowerCase(),
       };
     case 'REMOVE_NOTIFICATION':
-      return state;
+      return initialState;
     default:
       return state;
   }
@@ -23,9 +23,8 @@ export const notificationSet = data => {
   };
 };
 
-export const notificationRemove = data => {
+export const notificationRemove = () => {
   return {
     type: 'REMOVE_NOTIFICATION',
-    data,
   };
 };
