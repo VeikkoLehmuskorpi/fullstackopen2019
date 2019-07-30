@@ -35,19 +35,22 @@ export const voteAnecdote = id => {
   };
 };
 
-export const createAnecdote = data => {
-  return {
-    type: 'ADD_ANECDOTE',
-    data,
+export const createAnecdote = content => {
+  return async dispatch => {
+    const anecdote = await anecdoteService.createNew(content);
+    dispatch({
+      type: 'ADD_ANECDOTE',
+      data: anecdote,
+    });
   };
 };
 
 export const initializeAnecdotes = () => {
   return async dispatch => {
-    const data = await anecdoteService.getAll();
+    const anecdotes = await anecdoteService.getAll();
     dispatch({
       type: 'INIT_ANECDOTES',
-      data,
+      data: anecdotes,
     });
   };
 };
