@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 
 const Menu = () => {
   const padding = {
@@ -82,6 +82,7 @@ const CreateNew = props => {
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
   const [info, setInfo] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -91,9 +92,10 @@ const CreateNew = props => {
       info,
       votes: 0,
     });
+    setSubmitted(true);
   };
 
-  return (
+  return !submitted ? (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
@@ -112,6 +114,8 @@ const CreateNew = props => {
         <button>create</button>
       </form>
     </div>
+  ) : (
+    <Redirect to="/" />
   );
 };
 
