@@ -5,15 +5,10 @@ import { connect } from 'react-redux';
 import Anecdote from './Anecdote';
 
 const AnecdoteList = ({ visibleAnecdotes, voteAnecdote, notificationSet, notificationRemove }) => {
-  const vote = ({ content, id }) => {
-    console.log('vote', id);
+  const vote = anecdote => {
+    voteAnecdote(anecdote);
+    notificationSet({ message: `You voted "${anecdote.content}"`, type: 'success' });
 
-    // Send vote action
-    voteAnecdote(id);
-    // Send notification action
-    notificationSet({ message: `You voted "${content}"`, type: 'success' });
-
-    // Remove notification after 5 seconds
     setTimeout(() => {
       notificationRemove();
     }, 5000);
