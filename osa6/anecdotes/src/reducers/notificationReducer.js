@@ -16,10 +16,18 @@ const reducer = (state = initialState, action) => {
 
 export default reducer;
 
-export const notificationSet = data => {
-  return {
-    type: 'SET_NOTIFICATION',
-    data,
+export const notificationSet = (data, timeout) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data,
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: 'REMOVE_NOTIFICATION',
+      });
+    }, timeout * 1000);
   };
 };
 

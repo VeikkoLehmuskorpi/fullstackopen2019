@@ -7,11 +7,7 @@ import Anecdote from './Anecdote';
 const AnecdoteList = ({ visibleAnecdotes, voteAnecdote, notificationSet, notificationRemove }) => {
   const vote = anecdote => {
     voteAnecdote(anecdote);
-    notificationSet({ message: `You voted "${anecdote.content}"`, type: 'success' });
-
-    setTimeout(() => {
-      notificationRemove();
-    }, 5000);
+    notificationSet({ message: `You voted "${anecdote.content}"`, type: 'success' }, 5);
   };
 
   return visibleAnecdotes.map(anecdote => (
