@@ -13,12 +13,12 @@ const Togglable = React.forwardRef(
     });
 
     return (
-      <>
+      <div style={{ marginBottom: '1rem' }}>
         {visible && <div className='togglableContent'>{children}</div>}
         <button onClick={toggleVisibility}>
           {visible ? hideLabel : showLabel}
         </button>
-      </>
+      </div>
     );
   }
 );
