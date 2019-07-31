@@ -10,6 +10,7 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import UserList from './components/UserList';
 import User from './components/User';
+import Blog from './components/Blog';
 
 const App = ({ blogs, user, initUser, initBlogs }) => {
   useEffect(() => {
@@ -36,8 +37,8 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
       blogs: users.filter(u => u.id === user.id).length,
     }));
 
-  // Find singular user
-  const userById = id => uniqueUsers.find(user => user.id === id);
+  // Find singular item
+  const resourceById = (arr, id) => arr.find(a => a.id === id);
 
   return (
     <>
@@ -66,13 +67,24 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
           ></Route>
           <Route
             exact
+            path='/blogs/:id'
+            render={({ match }) => (
+              <Blog
+                blog={resourceById(blogs, match.params.id)}
+                user={user}
+                linked
+              ></Blog>
+            )}
+          ></Route>
+          <Route
+            exact
             path='/users'
             render={() => <UserList users={uniqueUsers}></UserList>}
           ></Route>
           <Route
             path='/users/:id'
             render={({ match }) => (
-              <User user={userById(match.params.id)}></User>
+              <User user={resourceById(uniqueUsers, match.params.id)}></User>
             )}
           ></Route>
         </>
