@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { initBlogs } from './reducers/blogReducer';
 import { initUser } from './reducers/userReducer';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
@@ -45,14 +44,15 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
     <Router>
       <>
         <Menu></Menu>
-        <h2>Blogs</h2>
+
         <Notification />
-        <LoginForm />
         <Route
           exact
           path='/'
           render={() => (
             <>
+              {user && <h2>Blogs</h2>}
+
               {user && (
                 <Togglable showLabel='New note' ref={blogFormRef}>
                   <BlogForm blogFormRef={blogFormRef} />
