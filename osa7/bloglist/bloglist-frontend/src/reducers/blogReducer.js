@@ -1,4 +1,4 @@
-import blogService from '../services/blogs';
+import blogService from '../services/blogService';
 
 const initialState = [];
 
