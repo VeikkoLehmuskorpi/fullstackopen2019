@@ -1,0 +1,11 @@
+POST http://localhost:3002/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZsZWhtdXNrb3JwaSIsImlkIjoiNWQyZWY0ZjNhMmEyZGEzZmM0MzQxYjY3IiwiaWF0IjoxNTYzMzU4OTQzfQ.fyade8_L_XwO9c9gwfOnmrJwI9UKtiCNVUnKHdjeMe0
+
+{
+  "title": "Second production blog",
+  "author": "John Doe",
+  "url": "www.github.com/johndoe",
+  "likes": 13,
+  "userId": "5d2ef4f3a2a2da3fc4341b67"
+}
