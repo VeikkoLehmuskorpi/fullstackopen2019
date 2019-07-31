@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const Notification = ({ notification }) => {
-  if (!notification.message) return null;
+  if (!notification) return null;
 
   const divStyle = {
     color: notification.color || 'black',
