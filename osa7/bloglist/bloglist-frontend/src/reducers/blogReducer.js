@@ -37,7 +37,7 @@ export const updateBlog = (blog, updatedFields, token) => {
   return async dispatch => {
     const updatedBlog = await blogService.update(blog, updatedFields, token);
     dispatch({
-      type: 'ADD_BLOG',
+      type: 'UPDATE_BLOG',
       data: updatedBlog,
     });
   };

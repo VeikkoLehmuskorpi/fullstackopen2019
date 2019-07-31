@@ -3,25 +3,14 @@ import { connect } from 'react-redux';
 import { useField } from './hooks';
 import loginService from './services/login';
 import { setNotification } from './reducers/notificationReducer';
-import {
-  createBlog,
-  updateBlog,
-  removeBlog,
-  initBlogs,
-} from './reducers/blogReducer';
+import { createBlog, initBlogs } from './reducers/blogReducer';
 import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 
-const App = ({
-  setNotification,
-  createBlog,
-  updateBlog,
-  removeBlog,
-  initBlogs,
-}) => {
+const App = ({ setNotification, createBlog, initBlogs }) => {
   //
   // user
   //
@@ -130,20 +119,6 @@ const App = ({
     }
   };
 
-  const handleblogLike = async blog => {
-    const updatedFields = {
-      likes: blog.likes + 1,
-    };
-
-    updateBlog(blog, updatedFields, user.token);
-  };
-
-  const handleBlogRemove = async blog => {
-    if (window.confirm(`Remove blog "${blog.title}"?`)) {
-      removeBlog(blog, user.token);
-    }
-  };
-
   //
   // render
   //
@@ -174,32 +149,18 @@ const App = ({
         </Togglable>
       )}
 
-      {user && (
-        <BlogList
-          user={user && user}
-          handleblogLike={handleblogLike}
-          handleBlogRemove={handleBlogRemove}
-        />
-      )}
+      {user && <BlogList user={user && user} />}
     </>
   );
-};
-
-const mapStateToProps = state => {
-  return {
-    blogs: state.blogs,
-  };
 };
 
 const mapDispatchToProps = {
   setNotification,
   createBlog,
-  updateBlog,
-  removeBlog,
   initBlogs,
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(App);

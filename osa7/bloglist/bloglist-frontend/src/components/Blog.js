@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
 
-const Blog = ({ blog, user, handleblogLike, handleBlogRemove }) => {
+const Blog = ({ blog, user, updateBlog, removeBlog }) => {
   const [detailsVisible, setDetailsVisible] = useState(false);
 
   const toggleDetailsVisibility = () => setDetailsVisible(!detailsVisible);
@@ -10,6 +12,20 @@ const Blog = ({ blog, user, handleblogLike, handleBlogRemove }) => {
     background: '#f4f4f4',
     padding: '1rem',
     margin: '0 0 1rem 0',
+  };
+
+  const handleblogLike = async blog => {
+    const updatedFields = {
+      likes: blog.likes + 1,
+    };
+
+    updateBlog(blog, updatedFields, user.token);
+  };
+
+  const handleBlogRemove = async blog => {
+    if (window.confirm(`Remove blog "${blog.title}"?`)) {
+      removeBlog(blog, user.token);
+    }
   };
 
   return (
@@ -37,8 +53,14 @@ const Blog = ({ blog, user, handleblogLike, handleBlogRemove }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   user: PropTypes.object,
-  handleblogLike: PropTypes.func.isRequired,
-  handleBlogRemove: PropTypes.func.isRequired,
 };
 
-export default Blog;
+const mapDispatchToProps = {
+  updateBlog,
+  removeBlog,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Blog);
