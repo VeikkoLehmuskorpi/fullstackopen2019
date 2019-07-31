@@ -19,7 +19,7 @@ const BlogForm = ({ blogFormRef, user, createBlog, setNotification }) => {
     const url = urlField.value;
 
     try {
-      createBlog({ title, author, url }, user.token);
+      createBlog({ title, author, url }, user, user.token);
 
       titleField.reset();
       authorField.reset();

@@ -22,10 +22,18 @@ const blogReducer = (state = initialState, action) => {
 
 export default blogReducer;
 
-export const createBlog = (blog, token) => {
+export const createBlog = (blog, user, token) => {
+  console.log('1. blog', blog);
+  if (!blog.title && !blog.author && !blog.url) {
+    throw new Error('Missing blog details');
+  }
   return async dispatch => {
     const newBlog = await blogService.createNew(blog, token);
-    console.log(newBlog);
+    newBlog.user = {
+      username: user.username,
+      name: user.name,
+      id: user.id,
+    };
     dispatch({
       type: 'ADD_BLOG',
       data: newBlog,
@@ -36,6 +44,11 @@ export const createBlog = (blog, token) => {
 export const updateBlog = (blog, updatedFields, token) => {
   return async dispatch => {
     const updatedBlog = await blogService.update(blog, updatedFields, token);
+    updatedBlog.user = {
+      username: blog.user.username,
+      name: blog.user.name,
+      id: blog.user.id,
+    };
     dispatch({
       type: 'UPDATE_BLOG',
       data: updatedBlog,
