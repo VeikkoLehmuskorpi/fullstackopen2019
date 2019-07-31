@@ -35,6 +35,21 @@ export const setUserFromStorage = user => {
   };
 };
 
+export const initUser = () => {
+  return async dispatch => {
+    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
+    if (userJSON !== null) {
+      const parsedUser = JSON.parse(userJSON);
+      setUserFromStorage(parsedUser);
+
+      dispatch({
+        type: 'SET_USER',
+        data: parsedUser,
+      });
+    }
+  };
+};
+
 export const removeUser = () => {
   return async dispatch => {
     dispatch({
