@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useField, useResource } from './hooks';
+import { useField } from './hooks';
 import loginService from './services/login';
 import { setNotification } from './reducers/notificationReducer';
+import {
+  createBlog,
+  updateBlog,
+  removeBlog,
+  initBlogs,
+} from './reducers/blogReducer';
 import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 
-const App = ({ setNotification }) => {
+const App = ({
+  setNotification,
+  createBlog,
+  updateBlog,
+  removeBlog,
+  initBlogs,
+}) => {
   //
   // user
   //
@@ -71,7 +83,6 @@ const App = ({ setNotification }) => {
   //
   // blogs
   //
-  const [blogs, blogService] = useResource('http://localhost:3002/api/blogs');
   const titleField = useField('text');
   const authorField = useField('text');
   const urlField = useField('text');
@@ -79,22 +90,8 @@ const App = ({ setNotification }) => {
   // blogForm ref
   const blogFormRef = React.createRef();
 
-  const fetchBlogs = async () => {
-    await blogService.getAll();
-  };
-
   useEffect(() => {
-    console.log('blog effect ran');
-
-    try {
-      fetchBlogs();
-    } catch (error) {
-      setNotification({ message: error.message, color: 'red' }, 5);
-
-      console.error(error);
-    }
-
-    return () => console.log('cleaning blog effect');
+    initBlogs();
   }, [user]);
 
   const handleCreateBlog = async event => {
@@ -107,7 +104,7 @@ const App = ({ setNotification }) => {
     const url = urlField.value;
 
     try {
-      await blogService.create({ title, author, url }, user.token);
+      createBlog({ title, author, url }, user.token);
 
       titleField.reset();
       authorField.reset();
@@ -138,12 +135,12 @@ const App = ({ setNotification }) => {
       likes: blog.likes + 1,
     };
 
-    await blogService.update(blog, updatedFields, user.token);
+    updateBlog(blog, updatedFields, user.token);
   };
 
   const handleBlogRemove = async blog => {
     if (window.confirm(`Remove blog "${blog.title}"?`)) {
-      await blogService.remove(blog, user.token);
+      removeBlog(blog, user.token);
     }
   };
 
@@ -179,7 +176,6 @@ const App = ({ setNotification }) => {
 
       {user && (
         <BlogList
-          blogs={blogs}
           user={user && user}
           handleblogLike={handleblogLike}
           handleBlogRemove={handleBlogRemove}
@@ -189,11 +185,21 @@ const App = ({ setNotification }) => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    blogs: state.blogs,
+  };
+};
+
 const mapDispatchToProps = {
   setNotification,
+  createBlog,
+  updateBlog,
+  removeBlog,
+  initBlogs,
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(App);
