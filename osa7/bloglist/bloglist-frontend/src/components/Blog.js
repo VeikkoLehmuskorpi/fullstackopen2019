@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
 
-const Blog = ({ blog, user, updateBlog, removeBlog }) => {
-  const [detailsVisible, setDetailsVisible] = useState(false);
-
-  const toggleDetailsVisibility = () => setDetailsVisible(!detailsVisible);
-
+const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   const blogStyle = {
     background: '#f4f4f4',
     padding: '1rem',
@@ -30,11 +26,11 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
 
   return (
     <div style={blogStyle} className='blog'>
-      <div className='blog-title' onClick={toggleDetailsVisibility}>
+      <div className='blog-title'>
         {blog.title} {blog.author}
       </div>
-      {detailsVisible ? (
-        <>
+      {linked && (
+        <div>
           <div>{blog.url}</div>
           <div>
             {blog.likes} likes{' '}
@@ -44,8 +40,8 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
           {user && blog.user.username === user.username ? (
             <button onClick={() => handleBlogRemove(blog)}>Remove</button>
           ) : null}
-        </>
-      ) : null}
+        </div>
+      )}
     </div>
   );
 };
