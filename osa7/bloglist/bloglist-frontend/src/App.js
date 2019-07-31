@@ -1,80 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useField } from './hooks';
-import loginService from './services/login';
-import { setNotification } from './reducers/notificationReducer';
-import { createBlog, initBlogs } from './reducers/blogReducer';
+import { initBlogs } from './reducers/blogReducer';
+import { setUserFromStorage } from './reducers/userReducer';
 import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 
-const App = ({ setNotification, createBlog, initBlogs }) => {
-  //
-  // user
-  //
-  const [user, setUser] = useState(null);
+const App = ({ user, setUserFromStorage, initBlogs }) => {
+  useEffect(() => {
+    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
+    if (userJSON !== null) {
+      const parsedUser = JSON.parse(userJSON);
+      setUserFromStorage(parsedUser);
+    }
+  }, []);
 
   // loginForm ref
   const loginFormRef = React.createRef();
-
-  useEffect(() => {
-    console.log('user effect ran');
-
-    const userJSON = window.localStorage.getItem('loggedInBloglistUser');
-    if (userJSON !== null) {
-      setUser(JSON.parse(userJSON));
-    }
-
-    return () => {
-      console.log('cleaning user effect');
-    };
-  }, []);
-
-  const usernameField = useField('text');
-  const passwordField = useField('text');
-
-  const handleLogin = async event => {
-    event.preventDefault();
-
-    const username = usernameField.value;
-    const password = passwordField.value;
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-
-      setUser(user);
-      window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
-    } catch (error) {
-      setNotification(
-        {
-          message: 'Invalid username or password.',
-          color: 'red',
-        },
-        5
-      );
-
-      console.error(error);
-    }
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    usernameField.reset();
-    passwordField.reset();
-    window.localStorage.removeItem('loggedInBloglistUser');
-  };
-
-  //
-  // blogs
-  //
-  const titleField = useField('text');
-  const authorField = useField('text');
-  const urlField = useField('text');
 
   // blogForm ref
   const blogFormRef = React.createRef();
@@ -83,45 +27,6 @@ const App = ({ setNotification, createBlog, initBlogs }) => {
     initBlogs();
   }, [user]);
 
-  const handleCreateBlog = async event => {
-    event.preventDefault();
-
-    blogFormRef.current.toggleVisibility();
-
-    const title = titleField.value;
-    const author = authorField.value;
-    const url = urlField.value;
-
-    try {
-      createBlog({ title, author, url }, user.token);
-
-      titleField.reset();
-      authorField.reset();
-      urlField.reset();
-
-      setNotification(
-        {
-          message: `A new blog "${title}" added`,
-          color: 'green',
-        },
-        5
-      );
-    } catch (error) {
-      setNotification(
-        {
-          message: 'Missing blog details.',
-          color: 'red',
-        },
-        5
-      );
-
-      console.error(error);
-    }
-  };
-
-  //
-  // render
-  //
   return (
     <>
       <h2>Blogs</h2>
@@ -129,23 +34,12 @@ const App = ({ setNotification, createBlog, initBlogs }) => {
       <Notification />
 
       <Togglable showLabel='Login' ref={loginFormRef}>
-        <LoginForm
-          user={user}
-          handleLogin={handleLogin}
-          handleLogout={handleLogout}
-          usernameField={usernameField}
-          passwordField={passwordField}
-        />
+        <LoginForm />
       </Togglable>
 
       {user && (
         <Togglable showLabel='New note' ref={blogFormRef}>
-          <BlogForm
-            handleCreateBlog={handleCreateBlog}
-            titleField={titleField}
-            authorField={authorField}
-            urlField={urlField}
-          />
+          <BlogForm blogFormRef={blogFormRef} />
         </Togglable>
       )}
 
@@ -154,13 +48,18 @@ const App = ({ setNotification, createBlog, initBlogs }) => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
 const mapDispatchToProps = {
-  setNotification,
-  createBlog,
+  setUserFromStorage,
   initBlogs,
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(App);

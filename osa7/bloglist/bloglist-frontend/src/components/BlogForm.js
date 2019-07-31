@@ -1,6 +1,50 @@
 import React from 'react';
+import { useField } from '../hooks/index';
+import { connect } from 'react-redux';
+import { createBlog } from '../reducers/blogReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
-const BlogForm = ({ handleCreateBlog, titleField, authorField, urlField }) => {
+const BlogForm = ({ blogFormRef, user, createBlog, setNotification }) => {
+  const titleField = useField('text');
+  const authorField = useField('text');
+  const urlField = useField('text');
+
+  const handleCreateBlog = async event => {
+    event.preventDefault();
+
+    blogFormRef.current.toggleVisibility();
+
+    const title = titleField.value;
+    const author = authorField.value;
+    const url = urlField.value;
+
+    try {
+      createBlog({ title, author, url }, user.token);
+
+      titleField.reset();
+      authorField.reset();
+      urlField.reset();
+
+      setNotification(
+        {
+          message: `A new blog "${title}" added`,
+          color: 'green',
+        },
+        5
+      );
+    } catch (error) {
+      setNotification(
+        {
+          message: 'Missing blog details.',
+          color: 'red',
+        },
+        5
+      );
+
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <h2>Create new</h2>
@@ -44,4 +88,18 @@ const BlogForm = ({ handleCreateBlog, titleField, authorField, urlField }) => {
   );
 };
 
-export default BlogForm;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = {
+  createBlog,
+  setNotification,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BlogForm);
