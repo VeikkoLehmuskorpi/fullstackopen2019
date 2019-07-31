@@ -19,13 +19,13 @@ const blogsToShow = (blogs, id) => {
   return blogs.filter(blog => blog.user.id === id);
 };
 
-const connectStateToProps = (state, user) => {
+const mapStateToProps = (state, user) => {
   return {
     blogs: blogsToShow(state.blogs, user.user.id),
   };
 };
 
 export default connect(
-  connectStateToProps,
+  mapStateToProps,
   null
 )(User);
