@@ -1,36 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useField, useResource } from './hooks';
 import loginService from './services/login';
+import { setNotification } from './reducers/notificationReducer';
 import LoginForm from './components/LoginForm';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 
-const App = () => {
-  //
-  // notification
-  //
-  const [notification, setNotification] = useState(null);
-
-  useEffect(() => {
-    console.log('notification effect ran');
-
-    if (notification === null) {
-      return;
-    }
-
-    const interval = setTimeout(() => {
-      console.log('5 seconds passed, removing message');
-      setNotification(null);
-    }, 5000);
-
-    return () => {
-      console.log('cleaning notification effect');
-      clearTimeout(interval);
-    };
-  }, [notification]);
-
+const App = ({ setNotification }) => {
   //
   // user
   //
@@ -70,10 +49,13 @@ const App = () => {
       setUser(user);
       window.localStorage.setItem('loggedInBloglistUser', JSON.stringify(user));
     } catch (error) {
-      setNotification({
-        message: 'Invalid username or password.',
-        color: 'red',
-      });
+      setNotification(
+        {
+          message: 'Invalid username or password.',
+          color: 'red',
+        },
+        5
+      );
 
       console.error(error);
     }
@@ -107,7 +89,7 @@ const App = () => {
     try {
       fetchBlogs();
     } catch (error) {
-      setNotification({ message: error.message, color: 'red' });
+      setNotification({ message: error.message, color: 'red' }, 5);
 
       console.error(error);
     }
@@ -131,15 +113,21 @@ const App = () => {
       authorField.reset();
       urlField.reset();
 
-      setNotification({
-        message: `A new blog "${title}" added`,
-        color: 'green',
-      });
+      setNotification(
+        {
+          message: `A new blog "${title}" added`,
+          color: 'green',
+        },
+        5
+      );
     } catch (error) {
-      setNotification({
-        message: 'Missing blog details.',
-        color: 'red',
-      });
+      setNotification(
+        {
+          message: 'Missing blog details.',
+          color: 'red',
+        },
+        5
+      );
 
       console.error(error);
     }
@@ -166,7 +154,7 @@ const App = () => {
     <>
       <h2>Blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification />
 
       <Togglable showLabel='Login' ref={loginFormRef}>
         <LoginForm
@@ -201,4 +189,11 @@ const App = () => {
   );
 };
 
-export default App;
+const mapDispatchToProps = {
+  setNotification,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);
