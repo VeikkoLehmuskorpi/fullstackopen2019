@@ -17,9 +17,6 @@ const App = ({ user, initUser, initBlogs }) => {
     initBlogs();
   }, [initBlogs, user]);
 
-  // loginForm ref
-  const loginFormRef = React.createRef();
-
   // blogForm ref
   const blogFormRef = React.createRef();
 
@@ -29,9 +26,7 @@ const App = ({ user, initUser, initBlogs }) => {
 
       <Notification />
 
-      <Togglable showLabel='Login' ref={loginFormRef}>
-        <LoginForm />
-      </Togglable>
+      <LoginForm />
 
       {user && (
         <Togglable showLabel='New note' ref={blogFormRef}>
