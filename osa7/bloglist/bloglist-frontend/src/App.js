@@ -67,7 +67,7 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
           <Route
             exact
             path='/users'
-            render={() => <UserList></UserList>}
+            render={() => <UserList users={uniqueUsers}></UserList>}
           ></Route>
           <Route
             path='/users/:id'
