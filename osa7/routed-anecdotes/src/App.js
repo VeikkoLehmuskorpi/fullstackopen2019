@@ -137,11 +137,17 @@ const App = () => {
     },
   ]);
 
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState(null);
 
   const addNew = anecdote => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
+    showNotification(`a new anecdote ${anecdote.content} created!`, 10);
+  };
+
+  const showNotification = (message, timeout = 10) => {
+    setNotification(message);
+    setTimeout(() => setNotification(null), timeout * 1000);
   };
 
   const anecdoteById = id => anecdotes.find(a => a.id === id);
@@ -164,6 +170,9 @@ const App = () => {
       <Router>
         <>
           <Menu />
+
+          {notification && <div>{notification}</div>}
+
           <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
           <Route
             exact
