@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Blog from './Blog';
 
 const BlogList = ({ blogs, user }) => {
+  if (user === null) return null;
+
   return blogs
     .sort((a, b) => b.likes - a.likes)
     .map(blog => <Blog key={blog.id} blog={blog} user={user} />);
@@ -11,6 +13,7 @@ const BlogList = ({ blogs, user }) => {
 const mapStateToProps = state => {
   return {
     blogs: state.blogs,
+    user: state.user,
   };
 };
 

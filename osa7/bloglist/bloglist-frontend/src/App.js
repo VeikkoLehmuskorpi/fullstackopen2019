@@ -39,7 +39,7 @@ const App = ({ user, initUser, initBlogs }) => {
         </Togglable>
       )}
 
-      {user && <BlogList user={user && user} />}
+      <BlogList />
     </>
   );
 };
