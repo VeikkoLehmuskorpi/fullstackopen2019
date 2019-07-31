@@ -41,10 +41,12 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
 
   if (user !== null)
     return (
-      <div style={{ marginBottom: '1rem' }}>
-        <p>Logged in as {user.username}</p>
+      <>
+        <div style={{ display: 'inline-block', marginRight: '.5rem' }}>
+          Logged in as {user.username}
+        </div>
         <button onClick={handleLogout}>Logout</button>
-      </div>
+      </>
     );
 
   return (
