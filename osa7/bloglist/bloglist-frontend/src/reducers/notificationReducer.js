@@ -1,4 +1,4 @@
-const initialState = {};
+const initialState = null;
 
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
