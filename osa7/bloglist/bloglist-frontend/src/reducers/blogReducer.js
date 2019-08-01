@@ -75,3 +75,20 @@ export const initBlogs = () => {
     });
   };
 };
+
+export const commentOnBlog = (blog, comment, token) => {
+  console.log('blog', blog);
+  console.log('blogId', blog.id);
+  return async dispatch => {
+    const updatedBlog = await blogService.comment(blog.id, comment, token);
+    updatedBlog.user = {
+      username: blog.user.username,
+      name: blog.user.name,
+      id: blog.user.id,
+    };
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: updatedBlog,
+    });
+  };
+};
