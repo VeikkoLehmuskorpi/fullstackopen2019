@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
+import blogService from '../services/blogService';
 
 const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   const handleblogLike = async blog => {
@@ -38,19 +39,19 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
             <button onClick={() => handleBlogRemove(blog)}>Remove</button>
           ) : null}
 
-          <CommentList blog={blog}></CommentList>
+          <CommentList blog={blog} user={user}></CommentList>
         </div>
       )}
     </div>
   );
 };
 
-const CommentForm = () => {
+const CommentForm = ({ blog, user }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
     const comment = e.target.comment.value;
-    console.log(comment);
+    blogService.comment(blog.id, comment, user.token);
   };
 
   return (
@@ -64,14 +65,14 @@ const CommentForm = () => {
   );
 };
 
-const CommentList = ({ blog }) => {
+const CommentList = ({ blog, user }) => {
   if (blog.comments.length === 0) return null;
 
   return (
     <div>
       <h2>Comments</h2>
 
-      <CommentForm></CommentForm>
+      <CommentForm blog={blog} user={user}></CommentForm>
 
       <ul>
         {blog.comments.map(comment => (
