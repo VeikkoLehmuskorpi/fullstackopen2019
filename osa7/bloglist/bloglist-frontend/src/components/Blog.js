@@ -4,12 +4,6 @@ import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
 
 const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
-  const blogStyle = {
-    background: '#f4f4f4',
-    padding: '1rem',
-    margin: '0 0 1rem 0',
-  };
-
   const handleblogLike = async blog => {
     const updatedFields = {
       likes: blog.likes + 1,
@@ -25,23 +19,65 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   };
 
   return (
-    <div style={blogStyle} className='blog'>
+    <div className='blog'>
       <div className='blog-title'>
         {blog.title} {blog.author}
       </div>
       {linked && (
         <div>
           <div>{blog.url}</div>
+
           <div>
             {blog.likes} likes{' '}
             {user && <button onClick={() => handleblogLike(blog)}>like</button>}
           </div>
+
           <div>added by {blog.user.name}</div>
+
           {user && blog.user.username === user.username ? (
             <button onClick={() => handleBlogRemove(blog)}>Remove</button>
           ) : null}
+
+          <CommentList blog={blog}></CommentList>
         </div>
       )}
+    </div>
+  );
+};
+
+const CommentForm = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const comment = e.target.comment.value;
+    console.log(comment);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Comment on blog
+        <input name='comment' type='text' />
+      </label>
+      <button type='submit'>send</button>
+    </form>
+  );
+};
+
+const CommentList = ({ blog }) => {
+  if (blog.comments.length === 0) return null;
+
+  return (
+    <div>
+      <h2>Comments</h2>
+
+      <CommentForm></CommentForm>
+
+      <ul>
+        {blog.comments.map(comment => (
+          <li key={comment.timestamp}>{comment.comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };
