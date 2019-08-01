@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
-import { setNotification } from '../reducers/notificationReducer';
+import {
+  setNotification,
+  removeNotification,
+} from '../reducers/notificationReducer';
 import { setUser, removeUser } from '../reducers/userReducer';
 import { Form, Button } from 'semantic-ui-react';
 
-const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
+const LoginForm = ({
+  user,
+  setUser,
+  removeUser,
+  setNotification,
+  removeNotification,
+}) => {
+  const [loading, setLoading] = useState(false);
+
   const usernameField = useField('text');
   const passwordField = useField('text');
 
   const handleLogin = async event => {
     event.preventDefault();
+    setLoading(true);
 
     const username = usernameField.value;
     const password = passwordField.value;
@@ -20,7 +32,10 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
         username,
         password,
       });
+      removeNotification();
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       setNotification(
         {
           message: 'Invalid username or password.',
@@ -75,7 +90,9 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
             />
           </label>
         </Form.Field>
-        <Button type='submit'>Login</Button>
+        <Button loading={loading && true} type='submit'>
+          Login
+        </Button>
       </Form>
     </>
   );
@@ -91,6 +108,7 @@ const mapDispatchToProps = {
   setUser,
   removeUser,
   setNotification,
+  removeNotification,
 };
 
 export default connect(
