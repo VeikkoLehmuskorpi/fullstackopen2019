@@ -45,6 +45,16 @@ router.post('/', async (request, response) => {
 });
 
 router.post('/:id', async (request, response) => {
+  if (!request.token) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
   const { id } = request.params;
 
   const blog = await Blog.findById(id);
