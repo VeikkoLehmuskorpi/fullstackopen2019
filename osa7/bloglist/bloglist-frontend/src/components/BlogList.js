@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 
 const BlogList = ({ blogs, user }) => {
-  if (user === null) return null;
+  if (user === null) return <Redirect to='/login'></Redirect>;
 
   return (
     <Table>

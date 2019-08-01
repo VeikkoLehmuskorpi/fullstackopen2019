@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Table } from 'semantic-ui-react';
 
-const UserList = ({ users }) => {
+const UserList = ({ user, users }) => {
+  if (user === null) return <Redirect to='/login'></Redirect>;
+
   return (
     <>
       <h2>Users</h2>
@@ -28,4 +31,13 @@ const UserList = ({ users }) => {
   );
 };
 
-export default UserList;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(UserList);

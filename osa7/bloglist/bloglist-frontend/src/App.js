@@ -12,6 +12,7 @@ import UserList from './components/UserList';
 import User from './components/User';
 import Blog from './components/Blog';
 import Menu from './components/Menu';
+import LoginForm from './components/LoginForm';
 
 const App = ({ blogs, user, initUser, initBlogs }) => {
   useEffect(() => {
@@ -87,6 +88,7 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
               <User user={resourceById(uniqueUsers, match.params.id)}></User>
             )}
           ></Route>
+          <Route path='/login' render={() => <LoginForm></LoginForm>}></Route>
         </Container>
       </>
     </Router>

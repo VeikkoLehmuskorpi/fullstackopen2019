@@ -43,15 +43,13 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
   if (user !== null)
     return (
       <>
-        <div style={{ display: 'inline-block', marginRight: '.5rem' }}>
-          Logged in as {user.username}
-        </div>
+        <h2>Logged in as {user.username}</h2>
         <Button onClick={handleLogout}>Logout</Button>
       </>
     );
 
   return (
-    <div>
+    <>
       <h2>Log in to application</h2>
 
       <Form onSubmit={handleLogin}>
@@ -79,7 +77,7 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
         </Form.Field>
         <Button type='submit'>Login</Button>
       </Form>
-    </div>
+    </>
   );
 };
 

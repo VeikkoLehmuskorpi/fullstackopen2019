@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Menu as MenuSUI } from 'semantic-ui-react';
-import LoginForm from './LoginForm';
 
-const Menu = () => {
+const Menu = ({ user }) => {
   return (
     <div style={{ background: '#f4f4f4' }}>
       <MenuSUI>
@@ -14,11 +14,20 @@ const Menu = () => {
           <Link to='/users'>Users</Link>
         </MenuSUI.Item>
         <MenuSUI.Item>
-          <LoginForm />
+          <Link to='/login'>{user ? 'User' : 'Login'}</Link>
         </MenuSUI.Item>
       </MenuSUI>
     </div>
   );
 };
 
-export default Menu;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Menu);
