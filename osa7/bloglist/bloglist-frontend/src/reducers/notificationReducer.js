@@ -24,3 +24,11 @@ export const setNotification = (data, timeout) => {
     }, timeout * 1000);
   };
 };
+
+export const removeNotification = () => {
+  return async dispatch => {
+    dispatch({
+      type: 'REMOVE_NOTIFICATION',
+    });
+  };
+};
