@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
-import blogService from '../services/blogService';
+import CommentList from './CommentList';
 
 const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   const handleblogLike = async blog => {
@@ -42,43 +42,6 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
           <CommentList blog={blog} user={user}></CommentList>
         </div>
       )}
-    </div>
-  );
-};
-
-const CommentForm = ({ blog, user }) => {
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    const comment = e.target.comment.value;
-    blogService.comment(blog.id, comment, user.token);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Comment on blog
-        <input name='comment' type='text' />
-      </label>
-      <button type='submit'>send</button>
-    </form>
-  );
-};
-
-const CommentList = ({ blog, user }) => {
-  if (blog.comments.length === 0) return null;
-
-  return (
-    <div>
-      <h2>Comments</h2>
-
-      <CommentForm blog={blog} user={user}></CommentForm>
-
-      <ul>
-        {blog.comments.map(comment => (
-          <li key={comment.timestamp}>{comment.comment}</li>
-        ))}
-      </ul>
     </div>
   );
 };
