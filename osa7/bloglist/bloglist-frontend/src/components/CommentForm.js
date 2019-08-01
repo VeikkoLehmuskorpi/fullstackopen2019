@@ -5,8 +5,8 @@ import { commentOnBlog } from '../reducers/blogReducer';
 const CommentForm = ({ blog, user, commentOnBlog }) => {
   const handleSubmit = e => {
     e.preventDefault();
-
     const comment = e.target.comment.value;
+    e.target.comment.value = '';
     commentOnBlog(blog, comment, user.token);
   };
 
