@@ -3,6 +3,7 @@ import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
 import { setNotification } from '../reducers/notificationReducer';
 import { setUser, removeUser } from '../reducers/userReducer';
+import { Form, Button } from 'semantic-ui-react';
 
 const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
   const usernameField = useField('text');
@@ -45,7 +46,7 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
         <div style={{ display: 'inline-block', marginRight: '.5rem' }}>
           Logged in as {user.username}
         </div>
-        <button onClick={handleLogout}>Logout</button>
+        <Button onClick={handleLogout}>Logout</Button>
       </>
     );
 
@@ -53,8 +54,8 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
     <div>
       <h2>Log in to application</h2>
 
-      <form onSubmit={handleLogin}>
-        <div>
+      <Form onSubmit={handleLogin}>
+        <Form.Field>
           <label>
             Username:{' '}
             <input
@@ -64,8 +65,8 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
               onChange={usernameField.onChange}
             />
           </label>
-        </div>
-        <div>
+        </Form.Field>
+        <Form.Field>
           <label>
             Password:{' '}
             <input
@@ -75,9 +76,9 @@ const LoginForm = ({ user, setUser, removeUser, setNotification }) => {
               onChange={passwordField.onChange}
             />
           </label>
-        </div>
-        <button type='submit'>Login</button>
-      </form>
+        </Form.Field>
+        <Button type='submit'>Login</Button>
+      </Form>
     </div>
   );
 };

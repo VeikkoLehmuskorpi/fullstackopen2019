@@ -1,4 +1,5 @@
 import React, { useState, useImperativeHandle } from 'react';
+import { Segment, Button } from 'semantic-ui-react';
 
 const Togglable = React.forwardRef(
   ({ children, showLabel, hideLabel }, ref) => {
@@ -13,12 +14,12 @@ const Togglable = React.forwardRef(
     });
 
     return (
-      <div style={{ marginBottom: '1rem' }}>
+      <Segment style={{ marginBottom: '1rem' }}>
         {visible && <div className='togglableContent'>{children}</div>}
-        <button onClick={toggleVisibility}>
+        <Button onClick={toggleVisibility}>
           {visible ? hideLabel : showLabel}
-        </button>
-      </div>
+        </Button>
+      </Segment>
     );
   }
 );

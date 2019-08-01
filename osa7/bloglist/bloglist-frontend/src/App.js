@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { initBlogs } from './reducers/blogReducer';
 import { initUser } from './reducers/userReducer';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
@@ -43,48 +44,50 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
   return (
     <Router>
       <>
-        <Menu></Menu>
+        <Container>
+          <Menu></Menu>
 
-        <Notification />
-        <Route
-          exact
-          path='/'
-          render={() => (
-            <>
-              {user && <h2>Blogs</h2>}
+          <Notification />
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <>
+                {user && <h2>Blogs</h2>}
 
-              {user && (
-                <Togglable showLabel='New note' ref={blogFormRef}>
-                  <BlogForm blogFormRef={blogFormRef} />
-                </Togglable>
-              )}
+                {user && (
+                  <Togglable showLabel='New blog' ref={blogFormRef}>
+                    <BlogForm blogFormRef={blogFormRef} />
+                  </Togglable>
+                )}
 
-              <BlogList />
-            </>
-          )}
-        ></Route>
-        <Route
-          exact
-          path='/blogs/:id'
-          render={({ match }) => (
-            <Blog
-              blog={resourceById(blogs, match.params.id)}
-              user={user}
-              linked
-            ></Blog>
-          )}
-        ></Route>
-        <Route
-          exact
-          path='/users'
-          render={() => <UserList users={uniqueUsers}></UserList>}
-        ></Route>
-        <Route
-          path='/users/:id'
-          render={({ match }) => (
-            <User user={resourceById(uniqueUsers, match.params.id)}></User>
-          )}
-        ></Route>
+                <BlogList />
+              </>
+            )}
+          ></Route>
+          <Route
+            exact
+            path='/blogs/:id'
+            render={({ match }) => (
+              <Blog
+                blog={resourceById(blogs, match.params.id)}
+                user={user}
+                linked
+              ></Blog>
+            )}
+          ></Route>
+          <Route
+            exact
+            path='/users'
+            render={() => <UserList users={uniqueUsers}></UserList>}
+          ></Route>
+          <Route
+            path='/users/:id'
+            render={({ match }) => (
+              <User user={resourceById(uniqueUsers, match.params.id)}></User>
+            )}
+          ></Route>
+        </Container>
       </>
     </Router>
   );

@@ -3,6 +3,7 @@ import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
 import { createBlog } from '../reducers/blogReducer';
 import { setNotification } from '../reducers/notificationReducer';
+import { Form, Button, Input } from 'semantic-ui-react';
 
 const BlogForm = ({ blogFormRef, user, createBlog, setNotification }) => {
   const titleField = useField('text');
@@ -46,45 +47,45 @@ const BlogForm = ({ blogFormRef, user, createBlog, setNotification }) => {
   };
 
   return (
-    <div>
+    <>
       <h2>Create new</h2>
-      <form onSubmit={handleCreateBlog}>
-        <div>
+      <Form onSubmit={handleCreateBlog}>
+        <Form.Field>
           <label>
             Title:{' '}
-            <input
+            <Input
               type='text'
               name='title'
               value={titleField.value}
               onChange={titleField.onChange}
             />
           </label>
-        </div>
-        <div>
+        </Form.Field>
+        <Form.Field>
           <label>
             Author:{' '}
-            <input
+            <Input
               type='text'
               name='author'
               value={authorField.value}
               onChange={authorField.onChange}
             />
           </label>
-        </div>
-        <div>
+        </Form.Field>
+        <Form.Field>
           <label>
             URL:{' '}
-            <input
+            <Input
               type='text'
               name='url'
               value={urlField.value}
               onChange={urlField.onChange}
             />
           </label>
-        </div>
-        <button type='submit'>Create</button>
-      </form>
-    </div>
+        </Form.Field>
+        <Button type='submit'>Create</Button>
+      </Form>
+    </>
   );
 };
 

@@ -1,21 +1,22 @@
 import React from 'react';
+import { List } from 'semantic-ui-react';
 import CommentForm from './CommentForm';
 
 const CommentList = ({ blog, user }) => {
   return (
-    <div>
+    <>
       <h2>Comments</h2>
 
       <CommentForm blog={blog} user={user}></CommentForm>
 
       {blog.comments.length > 0 && (
-        <ul>
+        <List animated relaxed divided verticalAlign='middle'>
           {blog.comments.map(comment => (
-            <li key={comment.timestamp}>{comment.comment}</li>
+            <List.Item key={comment.timestamp}>{comment.comment}</List.Item>
           ))}
-        </ul>
+        </List>
       )}
-    </div>
+    </>
   );
 };
 

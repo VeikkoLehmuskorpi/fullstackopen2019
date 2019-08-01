@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { commentOnBlog } from '../reducers/blogReducer';
+import { Form } from 'semantic-ui-react';
 
 const CommentForm = ({ blog, user, commentOnBlog }) => {
   const handleSubmit = e => {
@@ -11,13 +12,12 @@ const CommentForm = ({ blog, user, commentOnBlog }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Comment on blog
-        <input name='comment' type='text' />
-      </label>
-      <button type='submit'>send</button>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Input placeholder='Comment' name='comment' type='text' />
+        <Form.Button type='submit'>send</Form.Button>
+      </Form.Group>
+    </Form>
   );
 };
 

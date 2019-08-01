@@ -1,16 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Blog from './Blog';
+import { Table } from 'semantic-ui-react';
 
 const BlogList = ({ blogs, user }) => {
   if (user === null) return null;
 
-  return blogs.map(blog => (
-    <Link key={blog.id} to={`/blogs/${blog.id}`}>
-      <Blog blog={blog} user={user} />
-    </Link>
-  ));
+  return (
+    <Table>
+      <Table.Body>
+        {blogs.map(blog => (
+          <Table.Row key={blog.id}>
+            <Table.Cell>
+              <Link key={blog.id} to={`/blogs/${blog.id}`}>
+                <h3>{blog.title}</h3>
+              </Link>
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
 };
 
 const sortedBlogs = blogs => blogs.sort((a, b) => b.likes - a.likes);

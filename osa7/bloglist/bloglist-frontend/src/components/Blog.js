@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
+import { Segment, Button, Label, Icon } from 'semantic-ui-react';
 import CommentList from './CommentList';
 
 const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
@@ -20,29 +21,56 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   };
 
   return (
-    <div className='blog'>
-      <div className='blog-title'>
-        {blog.title} {blog.author}
-      </div>
+    <>
+      <h2 className='blog-title'>
+        {blog.title} by {blog.author}
+      </h2>
+
       {linked && (
-        <div>
-          <div>{blog.url}</div>
+        <Segment.Group className='blog'>
+          <>
+            <Segment>{blog.url}</Segment>
 
-          <div>
-            {blog.likes} likes{' '}
-            {user && <button onClick={() => handleblogLike(blog)}>like</button>}
-          </div>
+            <Segment>
+              {user && (
+                <Button
+                  as='div'
+                  labelPosition='right'
+                  onClick={() => handleblogLike(blog)}
+                >
+                  <Button icon>
+                    <Icon name='heart'></Icon> Like
+                  </Button>
+                  <Label as='a' basic pointing='left'>
+                    {blog.likes}
+                  </Label>
+                </Button>
+              )}
+            </Segment>
 
-          <div>added by {blog.user.name}</div>
+            <Segment>added by {blog.user.name}</Segment>
 
-          {user && blog.user.username === user.username ? (
-            <button onClick={() => handleBlogRemove(blog)}>Remove</button>
-          ) : null}
+            {user && blog.user.username === user.username ? (
+              <Segment>
+                <Button
+                  animated='vertical'
+                  onClick={() => handleBlogRemove(blog)}
+                >
+                  <Button.Content hidden>Remove</Button.Content>
+                  <Button.Content visible>
+                    <Icon name='trash'></Icon>
+                  </Button.Content>
+                </Button>
+              </Segment>
+            ) : null}
 
-          <CommentList blog={blog} user={user}></CommentList>
-        </div>
+            <Segment>
+              <CommentList blog={blog} user={user}></CommentList>
+            </Segment>
+          </>
+        </Segment.Group>
       )}
-    </div>
+    </>
   );
 };
 
