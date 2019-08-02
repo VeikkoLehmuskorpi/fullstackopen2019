@@ -3,10 +3,6 @@
   "version": "0.0.1",
   "description": "webpack practice",
   "main": "webpack.config.js",
-  "scripts": {
-    "start": "webpack-dev-server --mode=development",
-    "build": "webpack --mode=development"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/veikkolehmuskorpi/fullstackopen2019.git"
@@ -14,6 +10,10 @@
   "keywords": [
     "webpack"
   ],
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
   "author": "Veikko Lehmuskorpi",
   "license": "MIT",
   "dependencies": {
