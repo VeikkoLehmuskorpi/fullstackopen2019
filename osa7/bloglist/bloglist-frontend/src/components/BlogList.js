@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 
 const BlogList = ({ blogs, user }) => {
-  if (user === null) return <Redirect to='/login'></Redirect>;
+  if (user === null) return <Redirect to='/login' />;
 
   return (
     <Table>

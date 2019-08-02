@@ -10,4 +10,5 @@ const reducer = combineReducers({
   user: userReducer,
 });
 
+// eslint-disable-next-line
 export const store = createStore(reducer, applyMiddleware(thunk));

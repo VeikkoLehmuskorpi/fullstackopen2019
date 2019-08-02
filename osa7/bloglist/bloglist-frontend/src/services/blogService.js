@@ -48,10 +48,10 @@ const remove = async (blog, token) => {
 };
 
 // comment
-const comment = async (blogId, comment, token) => {
+const comment = async (blogId, blogComment, token) => {
   const response = await axios.post(
     `${baseUrl}/${blogId}`,
-    { comment },
+    { blogComment },
     headers(token)
   );
 

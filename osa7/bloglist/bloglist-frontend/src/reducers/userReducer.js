@@ -4,12 +4,12 @@ const initialState = null;
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-  case 'SET_USER':
-    return action.data;
-  case 'REMOVE_USER':
-    return initialState;
-  default:
-    return state;
+    case 'SET_USER':
+      return action.data;
+    case 'REMOVE_USER':
+      return initialState;
+    default:
+      return state;
   }
 };
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, waitForElement } from '@testing-library/react';
-jest.mock('./hooks/index.js');
 import App from './App';
+
+jest.mock('./hooks/index.js');
 
 describe('<App />', () => {
   test('renders all blogs it gets from backend', async () => {

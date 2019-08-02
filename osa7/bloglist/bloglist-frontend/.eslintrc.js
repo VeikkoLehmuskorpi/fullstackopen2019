@@ -2,9 +2,15 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    'jest/globals': true,
+    jest: true,
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'airbnb',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'prettier/react',
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -14,7 +20,6 @@ module.exports = {
   },
   plugins: ['react', 'jest', 'prettier'],
   rules: {
-    indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
@@ -24,5 +29,24 @@ module.exports = {
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 0,
     'react/prop-types': 0,
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'prettier/prettier': 'error',
+    'no-shadow': [
+      'error',
+      {
+        allow: [
+          'initUser',
+          'initBlogs',
+          'updateBlog',
+          'removeBlog',
+          'setNotification',
+          'setUser',
+          'removeUser',
+          'removeNotification',
+          'commentOnBlog',
+          'createBlog',
+        ],
+      },
+    ],
   },
 };

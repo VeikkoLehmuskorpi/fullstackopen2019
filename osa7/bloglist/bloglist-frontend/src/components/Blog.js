@@ -1,9 +1,11 @@
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-alert */
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Segment, Button, Label, Icon } from 'semantic-ui-react';
+import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import CommentList from './CommentList';
 
@@ -15,22 +17,25 @@ const Blog = ({
   removeBlog,
   setNotification,
 }) => {
-  const handleblogLike = async blog => {
+  const handleblogLike = async currentBlog => {
     const updatedFields = {
-      likes: blog.likes + 1,
+      likes: currentBlog.likes + 1,
     };
 
-    updateBlog(blog, updatedFields, user.token);
+    updateBlog(currentBlog, updatedFields, user.token);
   };
 
-  const handleBlogRemove = async blog => {
-    if (window.confirm(`Remove blog "${blog.title}"?`)) {
-      removeBlog(blog, user.token);
-      setNotification({ message: `${blog.title} removed`, color: 'green' }, 5);
+  const handleBlogRemove = async currentBlog => {
+    if (window.confirm(`Remove blog "${currentBlog.title}"?`)) {
+      removeBlog(currentBlog, user.token);
+      setNotification(
+        { message: `${currentBlog.title} removed`, color: 'green' },
+        5
+      );
     }
   };
 
-  if (!blog) return <Redirect to='/'></Redirect>;
+  if (!blog) return <Redirect to='/' />;
 
   return (
     <>
@@ -51,7 +56,7 @@ const Blog = ({
                   onClick={() => handleblogLike(blog)}
                 >
                   <Button icon>
-                    <Icon name='heart'></Icon> Like
+                    <Icon name='heart' /> Like
                   </Button>
                   <Label as='a' basic pointing='left'>
                     {blog.likes}
@@ -70,14 +75,14 @@ const Blog = ({
                 >
                   <Button.Content hidden>Remove</Button.Content>
                   <Button.Content visible>
-                    <Icon name='trash'></Icon>
+                    <Icon name='trash' />
                   </Button.Content>
                 </Button>
               </Segment>
             ) : null}
 
             <Segment>
-              <CommentList blog={blog} user={user}></CommentList>
+              <CommentList blog={blog} user={user} />
             </Segment>
           </>
         </Segment.Group>
@@ -87,7 +92,9 @@ const Blog = ({
 };
 
 Blog.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   blog: PropTypes.object,
+  // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object,
 };
 

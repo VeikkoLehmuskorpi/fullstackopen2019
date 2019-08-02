@@ -1,12 +1,14 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
+import { Form, Button } from 'semantic-ui-react';
+import { useField } from '../hooks/index';
 import {
   setNotification,
   removeNotification,
 } from '../reducers/notificationReducer';
 import { setUser, removeUser } from '../reducers/userReducer';
-import { Form, Button } from 'semantic-ui-react';
 
 const LoginForm = ({
   user,

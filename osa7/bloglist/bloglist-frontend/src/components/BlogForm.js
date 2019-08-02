@@ -1,9 +1,11 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
+import { Form, Button, Input } from 'semantic-ui-react';
+import { useField } from '../hooks/index';
 import { createBlog } from '../reducers/blogReducer';
 import { setNotification } from '../reducers/notificationReducer';
-import { Form, Button, Input } from 'semantic-ui-react';
 
 const BlogForm = ({ blogFormRef, user, createBlog, setNotification }) => {
   const titleField = useField('text');
