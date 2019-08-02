@@ -11,9 +11,6 @@ module.exports = config = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        query: {
-          presets: ['@babel/preset-react'],
-        },
       },
     ],
   },
