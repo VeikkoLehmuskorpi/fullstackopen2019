@@ -1,0 +1,16 @@
+{
+  "name": "webpack-osa7",
+  "version": "0.0.1",
+  "description": "webpack practice",
+  "main": "webpack.config.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veikkolehmuskorpi/fullstackopen2019.git"
+  },
+  "keywords": [
+    "webpack"
+  ],
+  "author": "Veikko Lehmuskorpi",
+  "license": "MIT"
+}
