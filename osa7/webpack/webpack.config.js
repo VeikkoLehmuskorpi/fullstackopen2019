@@ -12,6 +12,10 @@ module.exports = config = {
         test: /\.js$/,
         loader: 'babel-loader',
       },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+      },
     ],
   },
 };
