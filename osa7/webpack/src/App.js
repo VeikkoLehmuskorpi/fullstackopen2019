@@ -1,5 +1,7 @@
+import React from 'react';
+
 const App = () => {
-  return null;
+  return <h1>Webpack!</h1>;
 };
 
 export default App;
