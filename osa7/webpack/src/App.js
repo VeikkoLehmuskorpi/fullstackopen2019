@@ -13,7 +13,7 @@ const App = () => {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/notes').then(response => setNotes(response.data));
+    axios.get(BACKEND_URL).then(response => setNotes(response.data));
   }, []);
 
   return (
