@@ -2,10 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogReducer';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { Segment, Button, Label, Icon } from 'semantic-ui-react';
+import { setNotification } from '../reducers/notificationReducer';
 import CommentList from './CommentList';
 
-const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
+const Blog = ({
+  blog,
+  user,
+  linked,
+  updateBlog,
+  removeBlog,
+  setNotification,
+}) => {
   const handleblogLike = async blog => {
     const updatedFields = {
       likes: blog.likes + 1,
@@ -17,8 +26,11 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
   const handleBlogRemove = async blog => {
     if (window.confirm(`Remove blog "${blog.title}"?`)) {
       removeBlog(blog, user.token);
+      setNotification({ message: `${blog.title} removed`, color: 'green' }, 5);
     }
   };
+
+  if (!blog) return <Redirect to='/'></Redirect>;
 
   return (
     <>
@@ -75,13 +87,14 @@ const Blog = ({ blog, user, linked, updateBlog, removeBlog }) => {
 };
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
+  blog: PropTypes.object,
   user: PropTypes.object,
 };
 
 const mapDispatchToProps = {
   updateBlog,
   removeBlog,
+  setNotification,
 };
 
 export default connect(
