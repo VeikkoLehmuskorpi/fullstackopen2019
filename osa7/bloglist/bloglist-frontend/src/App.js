@@ -36,7 +36,7 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
     })
     .map(uniqueUser => ({
       ...uniqueUser,
-      blogs: users.filter(u => u.id === user.id).length,
+      blogs: users.filter(u => u.id === uniqueUser.id).length,
     }));
 
   // Find singular item
