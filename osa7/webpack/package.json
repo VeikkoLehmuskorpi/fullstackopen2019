@@ -12,11 +12,13 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --mode=development",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production",
+    "server": "json-server -p3001 db.json"
   },
   "author": "Veikko Lehmuskorpi",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.19.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "webpack": "^4.39.0",
@@ -29,6 +31,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.1.0",
+    "json-server": "^0.15.0",
     "style-loader": "^0.23.1",
     "webpack-dev-server": "^3.7.2"
   }
