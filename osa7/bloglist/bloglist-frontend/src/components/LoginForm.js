@@ -75,6 +75,7 @@ const LoginForm = ({
             Username:{' '}
             <input
               type='text'
+              id='login-username-input'
               name='username'
               value={usernameField.value}
               onChange={usernameField.onChange}
@@ -86,13 +87,14 @@ const LoginForm = ({
             Password:{' '}
             <input
               type='text'
+              id='login-password-input'
               name='password'
               value={passwordField.value}
               onChange={passwordField.onChange}
             />
           </label>
         </Form.Field>
-        <Button loading={loading && true} type='submit'>
+        <Button loading={loading && true} type='submit' id='login-submit'>
           Login
         </Button>
       </Form>
