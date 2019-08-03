@@ -24,7 +24,8 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "webpack:start": "webpack-dev-server --mode=development",
-    "webpack:build": "webpack --mode=production"
+    "webpack:build": "webpack --mode=production",
+    "cypress:open": "cypress open"
   },
   "browserslist": {
     "production": [
@@ -46,6 +47,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.1.0",
+    "cypress": "^3.4.1",
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",
