@@ -1,12 +1,14 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { useField } from '../hooks/index';
 import { connect } from 'react-redux';
+import { Form, Button } from 'semantic-ui-react';
+import { useField } from '../hooks/index';
 import {
   setNotification,
   removeNotification,
 } from '../reducers/notificationReducer';
 import { setUser, removeUser } from '../reducers/userReducer';
-import { Form, Button } from 'semantic-ui-react';
 
 const LoginForm = ({
   user,
@@ -73,6 +75,7 @@ const LoginForm = ({
             Username:{' '}
             <input
               type='text'
+              id='login-username-input'
               name='username'
               value={usernameField.value}
               onChange={usernameField.onChange}
@@ -84,13 +87,14 @@ const LoginForm = ({
             Password:{' '}
             <input
               type='text'
+              id='login-password-input'
               name='password'
               value={passwordField.value}
               onChange={passwordField.onChange}
             />
           </label>
         </Form.Field>
-        <Button loading={loading && true} type='submit'>
+        <Button loading={loading && true} type='submit' id='login-submit'>
           Login
         </Button>
       </Form>

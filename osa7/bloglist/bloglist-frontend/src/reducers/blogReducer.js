@@ -4,19 +4,19 @@ const initialState = [];
 
 const blogReducer = (state = initialState, action) => {
   switch (action.type) {
-  case 'ADD_BLOG':
-    console.log(action.data);
-    return [...state, action.data];
-  case 'UPDATE_BLOG':
-    return state.map(blog =>
-      blog.id === action.data.id ? action.data : blog
-    );
-  case 'REMOVE_BLOG':
-    return state.filter(blog => blog.id !== action.data);
-  case 'INIT_BLOGS':
-    return action.data;
-  default:
-    return state;
+    case 'ADD_BLOG':
+      console.log(action.data);
+      return [...state, action.data];
+    case 'UPDATE_BLOG':
+      return state.map(blog =>
+        blog.id === action.data.id ? action.data : blog
+      );
+    case 'REMOVE_BLOG':
+      return state.filter(blog => blog.id !== action.data);
+    case 'INIT_BLOGS':
+      return action.data;
+    default:
+      return state;
   }
 };
 

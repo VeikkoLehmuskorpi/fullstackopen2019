@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { prettyDOM } from '@testing-library/dom';
-import Blog from './Blog';
-import { handleBlogLike, handleBlogRemove } from '../app';
+import { prettyDOM } from '@testing-library/jest-dom';
+// eslint-disable-next-line import/named
+import { handleBlogLike, handleBlogRemove } from './Blog';
 
 describe('<Blog/>', () => {
   test('renders content', () => {
@@ -15,7 +16,7 @@ describe('<Blog/>', () => {
         blog={blog}
         handleblogLike={() => handleBlogLike(blog)}
         handleBlogRemove={() => handleBlogRemove(blog)}
-      ></Blog>
+      />
     );
 
     component.debug();
@@ -58,7 +59,7 @@ describe('<Blog/>', () => {
         blog={blog}
         handleblogLike={() => handleBlogLike(blog)}
         handleBlogRemove={() => handleBlogRemove(blog)}
-      ></Blog>
+      />
     );
 
     expect(component.container).toHaveTextContent('Doe Title');
@@ -86,7 +87,7 @@ describe('<Blog/>', () => {
         blog={blog}
         handleblogLike={() => handleBlogLike(blog)}
         handleBlogRemove={() => handleBlogRemove(blog)}
-      ></Blog>
+      />
     );
 
     const title = component.container.querySelector('.blog-title');

@@ -12,9 +12,7 @@ describe('<SimpleBlog/>', () => {
 
     const onClick = jest.fn();
 
-    const component = render(
-      <SimpleBlog blog={blog} onClick={onClick}></SimpleBlog>
-    );
+    const component = render(<SimpleBlog blog={blog} onClick={onClick} />);
 
     component.debug();
 
@@ -35,9 +33,7 @@ describe('<SimpleBlog/>', () => {
 
     const onClick = jest.fn();
 
-    const { getByText } = render(
-      <SimpleBlog blog={blog} onClick={onClick}></SimpleBlog>
-    );
+    const { getByText } = render(<SimpleBlog blog={blog} onClick={onClick} />);
 
     const likeButton = getByText('like');
     fireEvent.click(likeButton);

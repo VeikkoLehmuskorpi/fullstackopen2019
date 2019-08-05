@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const blogs = [
   {
     id: '5a451df7571c224a31b5c8ce',
@@ -33,8 +35,6 @@ const blogs = [
     },
   },
 ];
-
-import { useState } from 'react';
 
 // useField
 export const useField = type => {

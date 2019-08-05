@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Table } from 'semantic-ui-react';
 
 const UserList = ({ user, users }) => {
-  if (user === null) return <Redirect to='/login'></Redirect>;
+  if (user === null) return <Redirect to='/login' />;
 
   return (
     <>
@@ -17,12 +17,12 @@ const UserList = ({ user, users }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users.map(user => (
-            <Table.Row key={user.id}>
+          {users.map(u => (
+            <Table.Row key={u.id}>
               <Table.Cell>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
+                <Link to={`/users/${u.id}`}>{u.name}</Link>
               </Table.Cell>
-              <Table.Cell>{user.blogs}</Table.Cell>
+              <Table.Cell>{u.blogs}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

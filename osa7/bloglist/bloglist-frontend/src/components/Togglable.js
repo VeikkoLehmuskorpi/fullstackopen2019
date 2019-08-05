@@ -1,6 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react';
 import { Segment, Button } from 'semantic-ui-react';
 
+// eslint-disable-next-line
 const Togglable = React.forwardRef(
   ({ children, showLabel, hideLabel }, ref) => {
     const [visible, setVisible] = useState(false);

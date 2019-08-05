@@ -7,7 +7,7 @@ const CommentList = ({ blog, user }) => {
     <>
       <h2>Comments</h2>
 
-      <CommentForm blog={blog} user={user}></CommentForm>
+      <CommentForm blog={blog} user={user} />
 
       {blog.comments.length > 0 && (
         <List animated relaxed divided verticalAlign='middle'>

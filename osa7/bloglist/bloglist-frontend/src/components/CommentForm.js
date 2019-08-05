@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { commentOnBlog } from '../reducers/blogReducer';
 import { Form } from 'semantic-ui-react';
+import { commentOnBlog } from '../reducers/blogReducer';
 
 const CommentForm = ({ blog, user, commentOnBlog }) => {
   const handleSubmit = e => {

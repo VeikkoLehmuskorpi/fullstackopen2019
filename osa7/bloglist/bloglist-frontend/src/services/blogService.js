@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/blogs';
+const baseUrl = 'http://localhost:3002/api/blogs';
 
 const headers = token => {
   return {
@@ -48,10 +48,10 @@ const remove = async (blog, token) => {
 };
 
 // comment
-const comment = async (blogId, comment, token) => {
+const comment = async (blogId, blogComment, token) => {
   const response = await axios.post(
     `${baseUrl}/${blogId}`,
-    { comment },
+    { blogComment },
     headers(token)
   );
 

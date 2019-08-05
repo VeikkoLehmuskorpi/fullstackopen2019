@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { initBlogs } from './reducers/blogReducer';
-import { initUser } from './reducers/userReducer';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import { initBlogs } from './reducers/blogReducer';
+import { initUser } from './reducers/userReducer';
 import BlogList from './components/BlogList';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
@@ -28,15 +28,15 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
 
   const users = blogs.map(blog => blog.user);
 
-  const uniqueUserIds = [...new Set(users.map(user => user.id))];
+  const uniqueUserIds = [...new Set(users.map(u => u.id))];
 
   const uniqueUsers = uniqueUserIds
     .map(id => {
-      return users.find(user => user.id === id);
+      return users.find(u => u.id === id);
     })
-    .map(user => ({
-      ...user,
-      blogs: users.filter(u => u.id === user.id).length,
+    .map(uniqueUser => ({
+      ...uniqueUser,
+      blogs: users.filter(u => u.id === uniqueUser.id).length,
     }));
 
   // Find singular item
@@ -46,7 +46,7 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
     <Router>
       <>
         <Container>
-          <Menu></Menu>
+          <Menu />
 
           <Notification />
           <Route
@@ -65,7 +65,7 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
                 <BlogList />
               </>
             )}
-          ></Route>
+          />
           <Route
             exact
             path='/blogs/:id'
@@ -74,21 +74,21 @@ const App = ({ blogs, user, initUser, initBlogs }) => {
                 blog={resourceById(blogs, match.params.id)}
                 user={user}
                 linked
-              ></Blog>
+              />
             )}
-          ></Route>
+          />
           <Route
             exact
             path='/users'
-            render={() => <UserList users={uniqueUsers}></UserList>}
-          ></Route>
+            render={() => <UserList users={uniqueUsers} />}
+          />
           <Route
             path='/users/:id'
             render={({ match }) => (
-              <User user={resourceById(uniqueUsers, match.params.id)}></User>
+              <User user={resourceById(uniqueUsers, match.params.id)} />
             )}
-          ></Route>
-          <Route path='/login' render={() => <LoginForm></LoginForm>}></Route>
+          />
+          <Route path='/login' render={() => <LoginForm />} />
         </Container>
       </>
     </Router>
