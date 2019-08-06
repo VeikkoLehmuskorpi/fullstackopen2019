@@ -1,0 +1,26 @@
+{
+  "name": "osa8-graphql",
+  "version": "0.1.0",
+  "description": "GrapQl",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "author": "Veikko Lehmuskorpi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veikkolehmuskorpi/fullstackopen2019"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.8.1",
+    "graphql": "^14.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
