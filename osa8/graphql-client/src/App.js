@@ -46,9 +46,6 @@ const App = () => {
   const { loading: authorsLoading, error: authorsError, data: authorsData } = useQuery(ALL_AUTHORS);
   const { loading: booksLoading, error: booksError, data: booksData } = useQuery(ALL_BOOKS);
 
-  console.log(authorsData);
-  console.log(booksData);
-
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
   });
