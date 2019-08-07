@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import Select from 'react-select';
 
 const EDIT_AUTHOR = gql`
   mutation editAuthor($name: String!, $born: Int!) {
@@ -14,10 +15,21 @@ const EDIT_AUTHOR = gql`
 `;
 
 const AuthorUpdateForm = () => {
+  const client = useApolloClient();
+  const { allAuthors } = client.readQuery({
+    query: gql`
+      query allAuthors {
+        allAuthors {
+          name
+        }
+      }
+    `,
+  });
+
   const [name, setName] = useState('');
   const [born, setBorn] = useState('');
 
-  const [editAuthor] = useMutation(EDIT_AUTHOR, {
+  const [editAuthor, { loading }] = useMutation(EDIT_AUTHOR, {
     variables: {
       name,
       born,
@@ -39,8 +51,17 @@ const AuthorUpdateForm = () => {
 
       <form onSubmit={submit}>
         <div>
-          name
-          <input value={name} onChange={({ target }) => setName(target.value)} />
+          <Select
+            isSearchable
+            loading={loading}
+            onChange={({ value }) => setName(value)}
+            options={allAuthors.map(author => {
+              return {
+                value: author.name,
+                label: author.name,
+              };
+            })}
+          />
         </div>
         <div>
           born
