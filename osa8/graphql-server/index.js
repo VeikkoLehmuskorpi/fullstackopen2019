@@ -178,11 +178,18 @@ const resolvers = {
         return null;
       }
 
+      const bookCount = authorName => {
+        return books.filter(book => book.author === authorName).length;
+      };
+
       const updatedAuthor = {
         ...author,
         name: args.name,
         born: args.setBornTo,
+        bookCount: bookCount(args.name),
       };
+
+      console.log(updatedAuthor);
 
       authors = authors.map(author => {
         return author.name === args.name ? updatedAuthor : author;
