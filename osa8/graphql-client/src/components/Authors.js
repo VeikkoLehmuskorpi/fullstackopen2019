@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-const Authors = ({ show }) => {
+const Authors = ({ show, loading, error, data }) => {
   if (!show) {
     return null;
   }
-  const authors = [];
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: </p>;
 
   return (
     <div>
@@ -16,11 +18,11 @@ const Authors = ({ show }) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map(a => (
-            <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+          {data.allAuthors.map(author => (
+            <tr key={author.name}>
+              <td>{author.name}</td>
+              <td>{author.born}</td>
+              <td>{author.bookCount}</td>
             </tr>
           ))}
         </tbody>
