@@ -1,11 +1,12 @@
 import React from 'react';
 
-const Books = ({ show }) => {
+const Books = ({ show, loading, error, data }) => {
   if (!show) {
     return null;
   }
 
-  const books = [];
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :</p>;
 
   return (
     <div>
@@ -18,11 +19,11 @@ const Books = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map(a => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+          {data.allBooks.map(book => (
+            <tr key={book.title}>
+              <td>{book.title}</td>
+              <td>{book.author}</td>
+              <td>{book.published}</td>
             </tr>
           ))}
         </tbody>
