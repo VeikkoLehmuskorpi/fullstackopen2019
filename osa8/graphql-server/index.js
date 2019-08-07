@@ -155,8 +155,8 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
-      if (!authors.find(author => author.name === args.name)) {
-        authors = authors.concat({ name: args.author });
+      if (!authors.find(author => author.name === args.author)) {
+        authors = authors.concat({ name: args.author, id: uuid() });
       }
 
       if (books.find(book => book.title === args.title)) {
