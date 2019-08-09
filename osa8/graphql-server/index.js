@@ -64,19 +64,24 @@ const resolvers = {
     authorCount: () => {
       return Author.collection.countDocuments();
     },
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
       if (!args.author && !args.genre) {
-        return Book.find({}).populate('author');
+        return await Book.find({}).populate('author');
       }
 
       if (args.genre) {
-        return Book.find({
+        return await Book.find({
           genres: { $in: args.genre },
         }).populate('author');
       }
 
+      if (args.author) {
+        const author = await Author.findOne({ name: args.author });
+        return await Book.find({ author: { $in: author.id } }).populate('author');
+      }
+
       /**
-       * @TODO Filter by args.author and args.author && args.genre
+       * @TODO Filter by both args.author AND args.genre
        */
     },
     allAuthors: () => {
@@ -97,7 +102,7 @@ const resolvers = {
       const existingAuthor = await Author.findOne({ name: args.author });
       if (!existingAuthor) {
         try {
-          const author = new Author({ name: args.author });
+          const author = new Author({ name: args.author, bookCount: 1 });
           await author.save();
         } catch (error) {
           throw new UserInputError(error.message, {
@@ -108,16 +113,19 @@ const resolvers = {
 
       try {
         const author = await Author.findOne({ name: args.author });
-        book.author = author._id;
+        book.author = author.id;
         book.populate('author');
         await book.save();
+        const bookCount = await Book.find({ author: { $in: author.id } }).countDocuments();
+        author.bookCount = bookCount;
+        await author.save();
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         });
       }
 
-      return book;
+      return book.populate('author');
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
