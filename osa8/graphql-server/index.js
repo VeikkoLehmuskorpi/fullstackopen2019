@@ -79,10 +79,6 @@ const resolvers = {
         const author = await Author.findOne({ name: args.author });
         return await Book.find({ author: { $in: author.id } }).populate('author');
       }
-
-      /**
-       * @TODO Filter by both args.author AND args.genre
-       */
     },
     allAuthors: () => {
       return Author.find({});
@@ -114,7 +110,7 @@ const resolvers = {
       try {
         const author = await Author.findOne({ name: args.author });
         book.author = author.id;
-        book.populate('author');
+        await book.populate('author').execPopulate();
         await book.save();
         const bookCount = await Book.find({ author: { $in: author.id } }).countDocuments();
         author.bookCount = bookCount;
@@ -125,7 +121,7 @@ const resolvers = {
         });
       }
 
-      return book.populate('author');
+      return book;
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
