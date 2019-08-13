@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const LoginForm = () => {
+const LoginForm = ({ show, login, setToken }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const submit = async event => {
+    event.preventDefault();
+
+    const result = await login({ variables: { username, password } });
+
+    if (result) {
+      const token = result.data.login.value;
+      setToken(token);
+      localStorage.setItem('books-and-authors-user-token', token);
+      setUsername('');
+      setPassword('');
+    }
+  };
+
+  if (!show) {
+    return null;
+  }
+
   return (
     <div>
-      <h1>TODO LoginForm</h1>
+      <form onSubmit={submit}>
+        <div>
+          username <input value={username} onChange={({ target }) => setUsername(target.value)} />
+        </div>
+        <div>
+          password{' '}
+          <input
+            type="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
     </div>
   );
 };

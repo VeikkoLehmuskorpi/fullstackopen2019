@@ -4,6 +4,7 @@ import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
+import LoginForm from './components/LoginForm';
 
 const ALL_AUTHORS = gql`
   query {
@@ -61,6 +62,8 @@ const LOGIN = gql`
 const App = () => {
   const client = useApolloClient();
 
+  const [token, setToken] = useState(null);
+
   const [page, setPage] = useState('authors');
 
   const { loading: authorsLoading, error: authorsError, data: authorsData } = useQuery(ALL_AUTHORS);
@@ -71,11 +74,13 @@ const App = () => {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
   });
 
-  const { loading: loginLoading, error: loginError, data: loginData } = useMutation(LOGIN);
+  const [login] = useMutation(LOGIN);
 
   const logout = () => {
+    setToken(null);
     localStorage.clear();
     client.clearStore();
+    setPage('authors');
   };
 
   return (
@@ -83,13 +88,14 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
-        <button onClick={() => setPage('login')}>login</button>
-        <button onClick={logout}>logout</button>
+        {token && <button onClick={() => setPage('add')}>add book</button>}
+        {!token && <button onClick={() => setPage('login')}>login</button>}
+        {token && <button onClick={logout}>logout</button>}
       </div>
 
       <Authors
         show={page === 'authors'}
+        token={token}
         loading={authorsLoading}
         error={authorsError}
         data={authorsData}
@@ -99,12 +105,7 @@ const App = () => {
 
       <NewBook show={page === 'add'} addBook={addBook} />
 
-      <LoginForm
-        show={page === 'login'}
-        loading={loginLoading}
-        error={loginError}
-        data={loginData}
-      />
+      <LoginForm show={page === 'login'} login={login} setToken={token => setToken(token)} />
     </div>
   );
 };

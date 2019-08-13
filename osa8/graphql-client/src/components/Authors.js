@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthorUpdateForm from './AuthorUpdateForm';
 
-const Authors = ({ show, loading, error, data }) => {
+const Authors = ({ token, show, loading, error, data }) => {
   if (!show) {
     return null;
   }
@@ -31,7 +31,7 @@ const Authors = ({ show, loading, error, data }) => {
         </table>
       </div>
 
-      <AuthorUpdateForm />
+      {token && <AuthorUpdateForm />}
     </>
   );
 };
