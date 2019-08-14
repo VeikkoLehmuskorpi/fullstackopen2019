@@ -9,7 +9,7 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
   const [filteredBooks, setFilteredBooks] = useState(null);
 
   useEffect(() => {
-    console.log('setAllGenres ran');
+    console.log(`Client changed, refetching all genres and filtered data...`);
 
     (async () => {
       const { data: clientData } = await client.query({
@@ -23,19 +23,23 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
     })();
   }, [booksQuery, client]);
 
-  const [getFilteredBooks, { data: filteredData }] = useLazyQuery(booksQuery, {
-    variables: { genresArray: [selectedGenre] },
-  });
+  const [getFilteredData, { data: filteredData, refetch }] = useLazyQuery(booksQuery);
 
   useEffect(() => {
-    console.log('getFilteredData ran');
-    getFilteredBooks();
-  }, [getFilteredBooks, selectedGenre]);
+    if (selectedGenre) {
+      console.log(`Selected genre ${selectedGenre} - Refetching filtered data...`);
+      getFilteredData({
+        variables: { genresArray: [selectedGenre] },
+      });
+    } else {
+      setFilteredBooks(null);
+      getFilteredData();
+    }
+  }, [getFilteredData, selectedGenre]);
 
   useEffect(() => {
-    console.log('filteredData ran');
+    console.log(`Filtered data changed, changing filtered books in state...`);
     if (filteredData && filteredData.allBooks) {
-      console.log('allBooks:', filteredData.allBooks);
       setFilteredBooks(filteredData.allBooks);
     }
   }, [filteredData]);
@@ -57,6 +61,13 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
         <td>{book.published}</td>
       </tr>
     ));
+  };
+
+  const handleFilterChange = ({ target }) => {
+    setSelectedGenre(target.value);
+    refetch({
+      variables: { genresArray: [selectedGenre] },
+    });
   };
 
   if (!show) return null;
@@ -82,11 +93,16 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
       </table>
 
       {allGenres.map(genre => (
-        <button key={genre} value={genre} onClick={({ target }) => setSelectedGenre(target.value)}>
+        <button key={genre} value={genre} onClick={handleFilterChange}>
           {genre}
         </button>
       ))}
-      <button onClick={() => setSelectedGenre(null)}>all genres</button>
+      <button
+        onClick={() => {
+          setSelectedGenre(null);
+        }}>
+        all genres
+      </button>
     </div>
   );
 };

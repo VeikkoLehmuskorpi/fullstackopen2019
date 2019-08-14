@@ -84,15 +84,7 @@ const App = () => {
   const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
 
   const [addBook] = useMutation(ADD_BOOK, {
-    // refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
-    update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_BOOKS });
-      dataInStore.allBooks.push(response.data.addBook);
-      store.writeQuery({
-        query: ALL_BOOKS,
-        data: dataInStore,
-      });
-    },
+    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
   });
 
   const [login] = useMutation(LOGIN, {
