@@ -18,8 +18,8 @@ const ALL_AUTHORS = gql`
 `;
 
 const ALL_BOOKS = gql`
-  query {
-    allBooks {
+  query($genresArray: [String!]) {
+    allBooks(genre: $genresArray) {
       title
       published
       id
@@ -101,7 +101,7 @@ const App = () => {
         data={authorsData}
       />
 
-      <Books show={page === 'books'} loading={booksLoading} error={booksError} data={booksData} />
+      <Books show={page === 'books'} loading={booksLoading} error={booksError} data={booksData} booksQuery={ALL_BOOKS}/>
 
       <NewBook show={page === 'add'} addBook={addBook} />
 
