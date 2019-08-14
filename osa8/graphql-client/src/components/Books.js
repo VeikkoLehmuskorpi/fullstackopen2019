@@ -1,49 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useApolloClient } from '@apollo/react-hooks';
 
 const Books = ({ show, loading, error, data, booksQuery }) => {
+  const client = useApolloClient();
+
   const [allGenres, setAllGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState(null);
 
   useEffect(() => {
-    try {
-      const allGenres = Array.from(data.allBooks).map(book => book.genres);
-      setAllGenres([...new Set(allGenres.flat())]);
-    } catch (error) {}
-  }, [data]);
+    console.log('setAllGenres ran');
 
-  const [filterByGenres, { data: genresData }] = useLazyQuery(booksQuery, {
-    variables: { genresArray: selectedGenre },
+    (async () => {
+      const { data: clientData } = await client.query({
+        query: booksQuery,
+      });
+      const clientGenres = Array.from(clientData.allBooks)
+        .map(book => book.genres)
+        .flat();
+      const clientGenresUnique = Array.from(new Set(clientGenres));
+      setAllGenres(clientGenresUnique);
+    })();
+  }, [booksQuery, client]);
+
+  const [getFilteredBooks, { data: filteredData }] = useLazyQuery(booksQuery, {
+    variables: { genresArray: [selectedGenre] },
   });
 
-  const handleGenreFilter = event => {
-    setSelectedGenre([event.target.value]);
-    filterByGenres();
-    try {
-      if (genresData.allBooks.length > 0) {
-        setFilteredData(genresData);
-      }
-    } catch (error) {}
-  };
+  useEffect(() => {
+    console.log('getFilteredData ran');
+    getFilteredBooks();
+  }, [getFilteredBooks, selectedGenre]);
 
-  if (!show) {
-    return null;
-  }
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  useEffect(() => {
+    console.log('filteredData ran');
+    if (filteredData && filteredData.allBooks) {
+      console.log('allBooks:', filteredData.allBooks);
+      setFilteredBooks(filteredData.allBooks);
+    }
+  }, [filteredData]);
 
   const booksToShow = () => {
     let source;
 
-    if (filteredData.allBooks) {
-      source = filteredData;
+    if (selectedGenre && filteredBooks) {
+      source = filteredBooks;
     } else {
-      source = data;
+      source = data.allBooks;
     }
 
-    return source.allBooks.map(book => (
+    return source.map(book => (
       <tr key={book.title}>
         <td>{book.title}</td>
         <td>{book.author.name}</td>
@@ -53,10 +59,9 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
     ));
   };
 
-  const resetFilter = () => {
-    setSelectedGenre(null);
-    setFilteredData([]);
-  };
+  if (!show) return null;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <div>
@@ -76,13 +81,12 @@ const Books = ({ show, loading, error, data, booksQuery }) => {
         </tbody>
       </table>
 
-      {allGenres &&
-        allGenres.map(genre => (
-          <button onClick={handleGenreFilter} key={genre} value={genre}>
-            {genre}
-          </button>
-        ))}
-      <button onClick={resetFilter}>all genres</button>
+      {allGenres.map(genre => (
+        <button key={genre} value={genre} onClick={({ target }) => setSelectedGenre(target.value)}>
+          {genre}
+        </button>
+      ))}
+      <button onClick={() => setSelectedGenre(null)}>all genres</button>
     </div>
   );
 };
