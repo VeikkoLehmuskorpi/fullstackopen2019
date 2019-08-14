@@ -10,12 +10,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     minlength: 3,
   },
-  /*   friends: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Person',
-    },
-  ], */
+  favoriteGenre: {
+    type: String,
+    required: true,
+    minlength: 1,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -149,7 +149,13 @@ const resolvers = {
       return author;
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username, password: 'placeholderpassword' });
+      const user = new User({
+        username: args.username,
+        password: 'placeholderpassword',
+        favoriteGenre: args.favoriteGenre,
+      });
+
+      console.log(user);
 
       try {
         await user.save();
@@ -170,6 +176,7 @@ const resolvers = {
 
       const userForToken = {
         username: args.username,
+        favoriteGenre: user.favoriteGenre,
         id: user._id,
       };
 
