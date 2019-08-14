@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const LoginForm = ({ show, login, setToken }) => {
+const LoginForm = ({ show, login, token, setToken }) => {
+  useEffect(() => {
+    if (!token) {
+      console.log('Checking local storage for user token...');
+      const lsToken = localStorage.getItem('books-and-authors-user-token');
+      if (lsToken) {
+        setToken(lsToken);
+      }
+    }
+  }, [setToken, token]);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 

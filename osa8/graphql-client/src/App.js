@@ -143,7 +143,12 @@ const App = () => {
         booksQuery={ALL_BOOKS}
       />
 
-      <LoginForm show={page === 'login'} login={login} setToken={token => setToken(token)} />
+      <LoginForm
+        show={page === 'login'}
+        login={login}
+        token={token}
+        setToken={token => setToken(token)}
+      />
     </div>
   );
 };
