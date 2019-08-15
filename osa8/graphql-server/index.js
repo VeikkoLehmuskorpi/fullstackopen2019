@@ -2,6 +2,7 @@ const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apol
 const mongoose = require('mongoose');
 const config = require('./utils/config');
 const jwt = require('jsonwebtoken');
+const { PubSub } = require('apollo-server');
 const Book = require('./models/bookSchema');
 const Author = require('./models/authorSchema');
 const User = require('./models/userSchema');
@@ -12,6 +13,8 @@ mongoose
   .connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(error => console.log(`Error connecting to MongoDB: ${error.message}`));
+
+const pubsub = new PubSub();
 
 const typeDefs = gql`
   type Mutation {
@@ -28,6 +31,10 @@ const typeDefs = gql`
     allBooks(author: String, genre: [String!]): [Book!]!
     allAuthors: [Author!]!
     me: User
+  }
+
+  type Subscription {
+    bookAdded: Book!
   }
 
   type User {
@@ -121,6 +128,8 @@ const resolvers = {
         });
       }
 
+      pubsub.publish('BOOK_ADDED', { bookAdded: book });
+
       return book;
     },
     editAuthor: async (root, args, { currentUser }) => {
@@ -155,8 +164,6 @@ const resolvers = {
         favoriteGenre: args.favoriteGenre,
       });
 
-      console.log(user);
-
       try {
         await user.save();
       } catch (error) {
@@ -183,6 +190,11 @@ const resolvers = {
       return { value: jwt.sign(userForToken, config.JWT_SECRET) };
     },
   },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
+    },
+  },
 };
 
 const server = new ApolloServer({
@@ -198,6 +210,7 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });
