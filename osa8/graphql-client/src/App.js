@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
+
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useQuery, useMutation, useSubscription, useApolloClient } from '@apollo/react-hooks';
+
 import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
 import LoginForm from './components/LoginForm';
 import Recommend from './components/Recommend';
+
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      id
+      published
+      genres
+      author {
+        name
+        born
+        id
+        bookCount
+      }
+    }
+  }
+`;
 
 const ALL_AUTHORS = gql`
   query {
@@ -73,20 +92,40 @@ const ME = gql`
 const App = () => {
   const client = useApolloClient();
 
-  const [token, setToken] = useState(null);
+  const updateCacheWith = addedBook => {
+    const isIncludeIn = (set, object) => set.map(book => book.id).includes(object.id);
 
+    const dataInStore = client.readQuery({ query: ALL_BOOKS });
+
+    if (!isIncludeIn(dataInStore.allBooks, addedBook)) {
+      dataInStore.allBooks.push(addedBook);
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: dataInStore,
+      });
+    }
+  };
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded;
+      alert(`${addedBook.title} added`);
+      updateCacheWith(addedBook);
+    },
+  });
+
+  const [token, setToken] = useState(null);
   const [page, setPage] = useState('authors');
 
   const { loading: authorsLoading, error: authorsError, data: authorsData } = useQuery(ALL_AUTHORS);
-
   const { loading: booksLoading, error: booksError, data: booksData } = useQuery(ALL_BOOKS);
-
   const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
-
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+    update: (store, response) => {
+      updateCacheWith(response.data.addBook);
+    },
   });
-
   const [login] = useMutation(LOGIN, {
     refetchQueries: [{ query: ME }],
   });
